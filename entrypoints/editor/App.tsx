@@ -18,6 +18,7 @@ import { LatexPanel } from './LatexPanel';
 import { CommandPalette } from './CommandPalette';
 import { TableOfContents, type TocItem } from './TableOfContents';
 import { ShortcutsPanel } from './ShortcutsPanel';
+import { ExportMenu } from './ExportMenu';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
 
@@ -336,6 +337,7 @@ export default function App() {
           <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
           <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
+          <ExportMenu noteId={activeNoteId} />
         </div>
 
         {/* Right: dark mode + TOC toggle + status */}
