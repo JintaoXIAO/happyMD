@@ -65,18 +65,17 @@ export default function App() {
   }, []);
 
   const statusText: Record<SaveStatus, string> = {
-    saved: '已保存 ✓',
+    saved: '✓ 已保存',
     saving: '保存中...',
     unsaved: '',
-    error: '保存失败 ✗',
+    error: '✗ 保存失败',
   };
 
   if (initialContent === null) {
     return (
       <div className="flex flex-col h-screen">
-        <div className="flex justify-between items-center px-6 py-1.5 border-b border-gray-100 text-xs text-gray-400">
-          <span className="font-medium tracking-wide">HappyNote</span>
-          <span>加载中...</span>
+        <div className="flex items-center justify-center h-full text-sm text-gray-400">
+          加载中...
         </div>
       </div>
     );
@@ -84,18 +83,25 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex justify-between items-center px-6 py-1.5 border-b border-gray-100 text-xs text-gray-400 shrink-0">
-        <div className="flex items-center gap-2">
-          <span className="font-medium tracking-wide">HappyNote</span>
-          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} />
-        </div>
-        <span className="transition-opacity duration-300">
-          {statusText[saveStatus]}
-        </span>
-      </div>
+      {/* Editor area */}
       <div className="flex-1 overflow-y-auto flex justify-center">
         <div className="w-full max-w-4xl" style={{ '--user-font': settings.fontFamily, '--user-code-font': settings.codeFontFamily } as React.CSSProperties}>
           <Editor defaultValue={initialContent} onChange={handleChange} />
+        </div>
+      </div>
+
+      {/* Bottom toolbar + status bar */}
+      <div className="flex justify-between items-center px-4 py-1 border-t border-gray-100 text-xs text-gray-400 shrink-0 bg-white">
+        {/* Left: tools */}
+        <div className="flex items-center gap-1">
+          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} />
+        </div>
+
+        {/* Right: status */}
+        <div className="flex items-center gap-3">
+          <span className="transition-opacity duration-300">
+            {statusText[saveStatus]}
+          </span>
         </div>
       </div>
     </div>
