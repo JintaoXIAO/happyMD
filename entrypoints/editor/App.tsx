@@ -146,6 +146,9 @@ export default function App() {
 
   // Create a new note
   const handleCreateNote = useCallback(async () => {
+    // If current note is empty, don't create another one
+    if (!latestContentRef.current.trim()) return;
+
     // Save current note first
     if (activeNoteIdRef.current && latestContentRef.current) {
       if (saveTimeoutRef.current) {

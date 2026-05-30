@@ -5,6 +5,7 @@ import { editorViewCtx, schemaCtx } from '@milkdown/kit/core';
 import { insertTableCommand } from '@milkdown/kit/preset/gfm';
 import { linkInputRule } from './link-input-plugin';
 import { codeBlockCollapsePlugin } from './code-collapse-plugin';
+import { imageURLPlugin } from './image-url-plugin';
 import { saveImage, getImage, IMAGE_URL_PREFIX } from './db';
 import type { TocItem } from './TableOfContents';
 
@@ -153,6 +154,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, not
     // Register custom plugins
     crepe.editor.use(linkInputRule);
     crepe.editor.use(codeBlockCollapsePlugin);
+    crepe.editor.use(imageURLPlugin);
 
     crepe.create().then(() => {
       crepeRef.current = crepe;
