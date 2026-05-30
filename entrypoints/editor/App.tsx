@@ -390,7 +390,7 @@ export default function App() {
           <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
           <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
-          <ExportMenu noteId={activeNoteId} onClearAll={handleClearAll} />
+          <ExportMenu noteId={activeNoteId} noteEmpty={!latestContentRef.current.trim()} onClearAll={handleClearAll} />
         </div>
 
         {/* Right: dark mode + TOC toggle + status */}
