@@ -387,14 +387,14 @@ export default function App() {
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
           </button>
-          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
           <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
-          <ExportMenu noteId={activeNoteId} noteEmpty={!latestContentRef.current.trim()} onClearAll={handleClearAll} />
+          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
         </div>
 
-        {/* Right: dark mode + TOC toggle + status */}
+        {/* Right: manage + dark mode + TOC + status */}
         <div className="flex items-center gap-2">
+          <ExportMenu noteId={activeNoteId} noteEmpty={!latestContentRef.current.trim()} onClearAll={handleClearAll} />
           {/* Dark mode toggle */}
           <button
             onClick={() => {

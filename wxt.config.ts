@@ -18,6 +18,14 @@ export default defineConfig({
     action: {
       default_title: 'Open HappyNote',
     },
+    commands: {
+      _execute_action: {
+        suggested_key: {
+          default: 'Alt+N',
+        },
+        description: 'Open HappyNote',
+      },
+    },
   },
   vite: () => ({
     plugins: [tailwindcss()],
