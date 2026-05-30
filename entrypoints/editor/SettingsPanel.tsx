@@ -86,6 +86,11 @@ export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps
   const defaultValue = activeTab === 'fontFamily' ? 'system-ui' : 'ui-monospace, monospace';
   const defaultLabel = activeTab === 'fontFamily' ? '系统默认' : '系统等宽';
 
+  // Display name for current font
+  const currentDisplayName = currentValue === defaultValue
+    ? defaultLabel
+    : currentValue.replace(/^"|"$/g, '');
+
   const filteredFonts = fonts.filter(
     (f) => f.toLowerCase().includes(search.toLowerCase())
   );
@@ -140,6 +145,11 @@ export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps
             >
               代码字体
             </button>
+          </div>
+
+          {/* Current font indicator */}
+          <div className="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100 shrink-0">
+            当前: <span className="text-gray-800 font-medium" style={{ fontFamily: currentValue }}>{currentDisplayName}</span>
           </div>
 
           {/* Default option */}
