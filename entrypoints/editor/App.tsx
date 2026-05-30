@@ -19,6 +19,7 @@ import { CommandPalette } from './CommandPalette';
 import { TableOfContents, type TocItem } from './TableOfContents';
 import { ShortcutsPanel } from './ShortcutsPanel';
 import { ExportMenu } from './ExportMenu';
+import { ConfirmDialog } from './ConfirmDialog';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
 
@@ -30,6 +31,7 @@ export default function App() {
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   // Multi-document state
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -217,11 +219,16 @@ export default function App() {
   }, [handleCreateNote]);
 
   // Delete a note
-  const handleDeleteNote = useCallback(async (id: string) => {
+  const handleDeleteNote = useCallback((id: string) => {
     // Don't delete the last note
     if (notes.length <= 1) return;
+    setDeleteConfirmId(id);
+  }, [notes.length]);
 
-    if (!confirm('确定删除这篇笔记？')) return;
+  const confirmDeleteNote = useCallback(async () => {
+    const id = deleteConfirmId;
+    if (!id) return;
+    setDeleteConfirmId(null);
 
     await deleteNote(id);
     const updatedList = await listNotes();
@@ -237,7 +244,7 @@ export default function App() {
       }
     }
     setSaveStatus('saved');
-  }, [notes.length]);
+  }, [deleteConfirmId]);
 
   const handleSettingsChange = useCallback((newSettings: Settings) => {
     setSettings(newSettings);
@@ -278,6 +285,18 @@ export default function App() {
 
       {/* Shortcuts Panel */}
       <ShortcutsPanel open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+
+      {/* Delete Confirmation */}
+      <ConfirmDialog
+        open={deleteConfirmId !== null}
+        title="删除笔记"
+        message="确定要删除这篇笔记吗？删除后无法恢复。"
+        confirmText="删除"
+        cancelText="取消"
+        danger
+        onConfirm={confirmDeleteNote}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
 
       {/* Editor area + TOC */}
       <div className="flex-1 overflow-hidden flex">
