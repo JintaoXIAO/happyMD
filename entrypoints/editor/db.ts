@@ -140,6 +140,12 @@ export async function deleteNote(id: string): Promise<void> {
   await db.delete(NOTES_STORE, id);
 }
 
+export async function clearAllNotes(): Promise<void> {
+  const db = await getDB();
+  await db.clear(NOTES_STORE);
+  await db.clear(IMAGES_STORE);
+}
+
 export async function listNotes(): Promise<NoteRecord[]> {
   const db = await getDB();
   const notes = await db.getAll(NOTES_STORE);

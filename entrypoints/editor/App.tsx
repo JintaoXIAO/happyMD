@@ -3,6 +3,7 @@ import { Editor, type EditorHandle } from './Editor';
 import {
   createNote,
   deleteNote,
+  clearAllNotes,
   getNote,
   listNotes,
   migrateIfNeeded,
@@ -32,6 +33,7 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [clearAllConfirm, setClearAllConfirm] = useState(false);
 
   // Multi-document state
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -246,6 +248,24 @@ export default function App() {
     setSaveStatus('saved');
   }, [deleteConfirmId]);
 
+  // Clear all notes
+  const handleClearAll = useCallback(() => {
+    setClearAllConfirm(true);
+  }, []);
+
+  const confirmClearAll = useCallback(async () => {
+    setClearAllConfirm(false);
+    await clearAllNotes();
+    // Create a fresh welcome note
+    const welcome = await createNote('');
+    const updatedList = await listNotes();
+    setNotes(updatedList);
+    setActiveNoteId(welcome.id);
+    setInitialContent(welcome.content);
+    latestContentRef.current = welcome.content;
+    setSaveStatus('saved');
+  }, []);
+
   const handleSettingsChange = useCallback((newSettings: Settings) => {
     setSettings(newSettings);
     saveSettings(newSettings).catch((err) => {
@@ -296,6 +316,18 @@ export default function App() {
         danger
         onConfirm={confirmDeleteNote}
         onCancel={() => setDeleteConfirmId(null)}
+      />
+
+      {/* Clear All Confirmation */}
+      <ConfirmDialog
+        open={clearAllConfirm}
+        title="清空所有笔记"
+        message="确定要清空所有笔记吗？所有笔记和图片都将被永久删除，无法恢复。建议先导出备份。"
+        confirmText="全部清空"
+        cancelText="取消"
+        danger
+        onConfirm={confirmClearAll}
+        onCancel={() => setClearAllConfirm(false)}
       />
 
       {/* Editor area + TOC */}
@@ -356,7 +388,7 @@ export default function App() {
           <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
           <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
-          <ExportMenu noteId={activeNoteId} />
+          <ExportMenu noteId={activeNoteId} onClearAll={handleClearAll} />
         </div>
 
         {/* Right: dark mode + TOC toggle + status */}
