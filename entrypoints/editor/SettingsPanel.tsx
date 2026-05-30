@@ -1,0 +1,216 @@
+import { useState, useRef, useEffect, useCallback } from 'react';
+import type { Settings } from './db';
+
+interface FontInfo {
+  family: string;
+  fullName: string;
+  style: string;
+}
+
+type FontTarget = 'fontFamily' | 'codeFontFamily';
+
+interface SettingsPanelProps {
+  settings: Settings;
+  onSettingsChange: (settings: Settings) => void;
+}
+
+export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps) {
+  const [open, setOpen] = useState(false);
+  const [fonts, setFonts] = useState<string[]>([]);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [fontsError, setFontsError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [activeTab, setActiveTab] = useState<FontTarget>('fontFamily');
+  const panelRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // Close on click outside
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [open]);
+
+  // Load system fonts when panel opens
+  const loadFonts = useCallback(async () => {
+    if (fontsLoaded) return;
+
+    if (!('queryLocalFonts' in window)) {
+      setFontsError('浏览器不支持读取本地字体');
+      setFontsLoaded(true);
+      return;
+    }
+
+    try {
+      const fontData: FontInfo[] = await (window as any).queryLocalFonts();
+      const families = [...new Set(fontData.map((f) => f.family))].sort(
+        (a, b) => a.localeCompare(b, 'zh-CN')
+      );
+      setFonts(families);
+      setFontsLoaded(true);
+    } catch (err: any) {
+      if (err.name === 'NotAllowedError') {
+        setFontsError('用户拒绝了字体访问权限');
+      } else {
+        setFontsError('无法读取系统字体');
+      }
+      setFontsLoaded(true);
+    }
+  }, [fontsLoaded]);
+
+  useEffect(() => {
+    if (open) {
+      loadFonts();
+      setTimeout(() => searchRef.current?.focus(), 50);
+    } else {
+      setSearch('');
+    }
+  }, [open, loadFonts]);
+
+  const currentValue = settings[activeTab];
+  const defaultValue = activeTab === 'fontFamily' ? 'system-ui' : 'ui-monospace, monospace';
+  const defaultLabel = activeTab === 'fontFamily' ? '系统默认' : '系统等宽';
+
+  const filteredFonts = fonts.filter(
+    (f) => f.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleSelect = (value: string) => {
+    onSettingsChange({ ...settings, [activeTab]: value });
+  };
+
+  return (
+    <div className="relative" ref={panelRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="p-1 rounded hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
+        title="设置"
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 flex flex-col max-h-[28rem]">
+          {/* Tabs */}
+          <div className="flex border-b border-gray-100 shrink-0">
+            <button
+              onClick={() => { setActiveTab('fontFamily'); setSearch(''); }}
+              className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
+                activeTab === 'fontFamily'
+                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              正文字体
+            </button>
+            <button
+              onClick={() => { setActiveTab('codeFontFamily'); setSearch(''); }}
+              className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
+                activeTab === 'codeFontFamily'
+                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              代码字体
+            </button>
+          </div>
+
+          {/* Default option */}
+          <button
+            onClick={() => handleSelect(defaultValue)}
+            className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between shrink-0 ${
+              currentValue === defaultValue
+                ? 'text-blue-600 font-medium'
+                : 'text-gray-700'
+            }`}
+          >
+            <span>{defaultLabel}</span>
+            {currentValue === defaultValue && (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            )}
+          </button>
+
+          <div className="border-t border-gray-100 shrink-0" />
+
+          {/* Search */}
+          <div className="px-3 py-1.5 shrink-0">
+            <input
+              ref={searchRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="搜索字体..."
+              className="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:border-blue-300"
+            />
+          </div>
+
+          {/* Font list */}
+          <div className="overflow-y-auto flex-1">
+            {fontsError && (
+              <div className="px-3 py-2 text-xs text-red-500">{fontsError}</div>
+            )}
+            {!fontsLoaded && !fontsError && (
+              <div className="px-3 py-2 text-xs text-gray-400">加载字体中...</div>
+            )}
+            {fontsLoaded && !fontsError && filteredFonts.length === 0 && (
+              <div className="px-3 py-2 text-xs text-gray-400">
+                {search ? '无匹配字体' : '未找到系统字体'}
+              </div>
+            )}
+            {filteredFonts.map((family) => {
+              const value = `"${family}"`;
+              return (
+                <button
+                  key={family}
+                  onClick={() => handleSelect(value)}
+                  className={`w-full text-left px-3 py-1 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${
+                    currentValue === value
+                      ? 'text-blue-600 font-medium'
+                      : 'text-gray-700'
+                  }`}
+                  style={{ fontFamily: value }}
+                >
+                  <span className="truncate">{family}</span>
+                  {currentValue === value && (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 ml-2">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

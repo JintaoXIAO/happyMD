@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import "@milkdown/crepe/theme/common/style.css";
+@import "@milkdown/crepe/theme/classic.css";
+
+.milkdown {
+  --crepe-font-default: var(--user-font, 'Open Sans', Arial, Helvetica, sans-serif);
+  --crepe-font-code: var(--user-code-font, ui-monospace, monospace);
+}
+
+/* Override CodeMirror's inline font-family for code blocks */
+.milkdown .cm-editor .cm-content,
+.milkdown .cm-editor .cm-gutters,
+.milkdown .cm-editor {
+  font-family: var(--crepe-font-code, ui-monospace, monospace) !important;
+}
+
+/* Inline code */
+.milkdown code {
+  font-family: var(--crepe-font-code, ui-monospace, monospace) !important;
+}
