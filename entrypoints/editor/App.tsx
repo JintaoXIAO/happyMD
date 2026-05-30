@@ -3,6 +3,7 @@ import { Editor, type EditorHandle } from './Editor';
 import { loadNote, saveNote, loadSettings, saveSettings, DEFAULT_SETTINGS } from './db';
 import { SettingsPanel } from './SettingsPanel';
 import { TableInsertButton } from './TableInsertButton';
+import { LatexPanel } from './LatexPanel';
 import type { Settings } from './db';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
@@ -98,6 +99,7 @@ export default function App() {
         <div className="flex items-center gap-1">
           <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} />
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
+          <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
         </div>
 
         {/* Right: status */}

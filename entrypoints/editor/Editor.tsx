@@ -1,6 +1,7 @@
 import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { Crepe, CrepeFeature } from '@milkdown/crepe';
-import { callCommand } from '@milkdown/kit/utils';
+import { callCommand, insert } from '@milkdown/kit/utils';
+import { editorViewCtx, schemaCtx } from '@milkdown/kit/core';
 import { insertTableCommand } from '@milkdown/kit/preset/gfm';
 import { linkInputRule } from './link-input-plugin';
 import { codeBlockCollapsePlugin } from './code-collapse-plugin';
@@ -12,6 +13,7 @@ interface EditorProps {
 
 export interface EditorHandle {
   insertTable: (row: number, col: number) => void;
+  insertLatex: (latex: string, block?: boolean) => void;
 }
 
 export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, onChange }, ref) => {
@@ -22,6 +24,25 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, onC
     insertTable(row: number, col: number) {
       if (crepeRef.current) {
         crepeRef.current.editor.action(callCommand(insertTableCommand.key, { row, col }));
+      }
+    },
+    insertLatex(latex: string, block = false) {
+      if (!crepeRef.current) return;
+      if (block) {
+        // Insert block-level LaTeX code block
+        crepeRef.current.editor.action(insert(`$$\n${latex || ' '}\n$$`, false));
+      } else {
+        // Insert inline math node directly via ProseMirror
+        crepeRef.current.editor.action((ctx) => {
+          const view = ctx.get(editorViewCtx);
+          const schema = ctx.get(schemaCtx);
+          const mathType = schema.nodes['math_inline'];
+          if (mathType) {
+            const node = mathType.create({ value: latex });
+            const tr = view.state.tr.replaceSelectionWith(node);
+            view.dispatch(tr.scrollIntoView());
+          }
+        });
       }
     },
   }));
@@ -42,7 +63,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, onC
         [CrepeFeature.BlockEdit]: false,
         [CrepeFeature.Toolbar]: false,
         [CrepeFeature.Table]: true,
-        [CrepeFeature.Latex]: false,
+        [CrepeFeature.Latex]: true,
         [CrepeFeature.TopBar]: false,
         [CrepeFeature.AI]: false,
       },
