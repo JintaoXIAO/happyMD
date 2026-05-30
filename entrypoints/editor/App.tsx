@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Editor } from './Editor';
+import { Editor, type EditorHandle } from './Editor';
 import { loadNote, saveNote, loadSettings, saveSettings, DEFAULT_SETTINGS } from './db';
 import { SettingsPanel } from './SettingsPanel';
+import { TableInsertButton } from './TableInsertButton';
 import type { Settings } from './db';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
@@ -12,6 +13,7 @@ export default function App() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestContentRef = useRef<string>('');
+  const editorHandleRef = useRef<EditorHandle>(null);
 
   useEffect(() => {
     Promise.all([loadNote(), loadSettings()])
@@ -86,7 +88,7 @@ export default function App() {
       {/* Editor area */}
       <div className="flex-1 overflow-y-auto flex justify-center">
         <div className="w-full max-w-4xl" style={{ '--user-font': settings.fontFamily, '--user-code-font': settings.codeFontFamily, '--user-font-size': `${settings.fontSize}px`, '--user-code-font-size': `${settings.codeFontSize}px` } as React.CSSProperties}>
-          <Editor defaultValue={initialContent} onChange={handleChange} />
+          <Editor ref={editorHandleRef} defaultValue={initialContent} onChange={handleChange} />
         </div>
       </div>
 
@@ -95,6 +97,7 @@ export default function App() {
         {/* Left: tools */}
         <div className="flex items-center gap-1">
           <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} />
+          <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
         </div>
 
         {/* Right: status */}

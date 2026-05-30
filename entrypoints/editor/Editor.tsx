@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { Crepe, CrepeFeature } from '@milkdown/crepe';
+import { callCommand } from '@milkdown/kit/utils';
+import { insertTableCommand } from '@milkdown/kit/preset/gfm';
 import { linkInputRule } from './link-input-plugin';
 import { codeBlockCollapsePlugin } from './code-collapse-plugin';
 
@@ -8,9 +10,21 @@ interface EditorProps {
   onChange: (markdown: string) => void;
 }
 
-export function Editor({ defaultValue, onChange }: EditorProps) {
+export interface EditorHandle {
+  insertTable: (row: number, col: number) => void;
+}
+
+export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, onChange }, ref) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const crepeRef = useRef<Crepe | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    insertTable(row: number, col: number) {
+      if (crepeRef.current) {
+        crepeRef.current.editor.action(callCommand(insertTableCommand.key, { row, col }));
+      }
+    },
+  }));
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -27,7 +41,7 @@ export function Editor({ defaultValue, onChange }: EditorProps) {
         [CrepeFeature.Placeholder]: true,
         [CrepeFeature.BlockEdit]: false,
         [CrepeFeature.Toolbar]: false,
-        [CrepeFeature.Table]: false,
+        [CrepeFeature.Table]: true,
         [CrepeFeature.Latex]: false,
         [CrepeFeature.TopBar]: false,
         [CrepeFeature.AI]: false,
@@ -63,4 +77,4 @@ export function Editor({ defaultValue, onChange }: EditorProps) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <div ref={editorRef} className="min-h-full" />;
-}
+});
