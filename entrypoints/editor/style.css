@@ -2,6 +2,8 @@
 @import "@milkdown/crepe/theme/common/style.css";
 @import "@milkdown/crepe/theme/classic.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 .milkdown {
   --crepe-font-default: var(--user-font, 'Open Sans', Arial, Helvetica, sans-serif);
   --crepe-font-code: var(--user-code-font, ui-monospace, monospace);
@@ -34,6 +36,14 @@
 }
 
 /* Scale headings relative to user font size */
+.milkdown .ProseMirror h1,
+.milkdown .ProseMirror h2,
+.milkdown .ProseMirror h3,
+.milkdown .ProseMirror h4,
+.milkdown .ProseMirror h5,
+.milkdown .ProseMirror h6 {
+  font-family: var(--crepe-font-default) !important;
+}
 .milkdown .ProseMirror h1 { font-size: calc(var(--user-font-size, 16px) * 2.25) !important; line-height: 1.2 !important; }
 .milkdown .ProseMirror h2 { font-size: calc(var(--user-font-size, 16px) * 1.875) !important; line-height: 1.25 !important; }
 .milkdown .ProseMirror h3 { font-size: calc(var(--user-font-size, 16px) * 1.625) !important; line-height: 1.3 !important; }
@@ -82,4 +92,91 @@
 .code-block-collapsed {
   min-height: 0 !important;
   padding-bottom: 0 !important;
+}
+
+/* ===== Dark Mode ===== */
+.dark {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.dark .milkdown {
+  --crepe-color-background: #1a1a1a;
+  --crepe-color-surface: #242424;
+  --crepe-color-on-surface: #e0e0e0;
+  --crepe-color-on-surface-variant: #a0a0a0;
+  --crepe-color-outline: #3a3a3a;
+  --crepe-color-primary: #7eb8ff;
+  --crepe-color-secondary: #4a4a4a;
+  --crepe-color-solid: #e0e0e0;
+  color: #e0e0e0;
+}
+
+.dark .milkdown .ProseMirror {
+  color: #e0e0e0;
+}
+
+.dark .milkdown .ProseMirror h1,
+.dark .milkdown .ProseMirror h2,
+.dark .milkdown .ProseMirror h3,
+.dark .milkdown .ProseMirror h4,
+.dark .milkdown .ProseMirror h5,
+.dark .milkdown .ProseMirror h6 {
+  color: #f0f0f0;
+}
+
+.dark .milkdown .ProseMirror blockquote {
+  border-left-color: #4a4a4a;
+  color: #a0a0a0;
+}
+
+.dark .milkdown .ProseMirror hr {
+  border-color: #3a3a3a;
+}
+
+.dark .milkdown .ProseMirror a {
+  color: #7eb8ff;
+}
+
+/* Dark mode code blocks */
+.dark .milkdown .cm-editor {
+  background-color: #242424 !important;
+}
+
+.dark .milkdown .cm-editor .cm-content {
+  color: #d4d4d4 !important;
+}
+
+.dark .milkdown .cm-editor .cm-gutters {
+  background-color: #242424 !important;
+  border-color: #3a3a3a !important;
+  color: #666 !important;
+}
+
+.dark .milkdown code {
+  background-color: #2a2a2a !important;
+  color: #e0a0a0 !important;
+}
+
+/* Dark mode table */
+.dark .milkdown table {
+  border-color: #3a3a3a;
+}
+
+.dark .milkdown th,
+.dark .milkdown td {
+  border-color: #3a3a3a;
+}
+
+.dark .milkdown th {
+  background-color: #242424;
+}
+
+/* Dark mode collapse button */
+.dark .code-collapse-btn {
+  color: #666;
+}
+
+.dark .code-collapse-btn:hover {
+  color: #999;
 }
