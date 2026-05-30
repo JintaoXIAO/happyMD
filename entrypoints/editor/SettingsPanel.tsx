@@ -86,6 +86,13 @@ export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps
   const defaultValue = activeTab === 'fontFamily' ? 'system-ui' : 'ui-monospace, monospace';
   const defaultLabel = activeTab === 'fontFamily' ? '系统默认' : '系统等宽';
 
+  // Font size for current tab
+  const sizeKey = activeTab === 'fontFamily' ? 'fontSize' : 'codeFontSize';
+  const currentSize = settings[sizeKey];
+  const FONT_SIZES = [12, 14, 16, 18, 20, 24];
+  const sizeIndex = FONT_SIZES.indexOf(currentSize);
+  const sliderValue = sizeIndex >= 0 ? sizeIndex : FONT_SIZES.findIndex(s => s >= currentSize);
+
   // Display name for current font
   const currentDisplayName = currentValue === defaultValue
     ? defaultLabel
@@ -151,6 +158,33 @@ export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps
           {/* Current font indicator */}
           <div className="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100 shrink-0">
             当前: <span className="text-gray-800 font-medium" style={{ fontFamily: currentValue }}>{currentDisplayName}</span>
+          </div>
+
+          {/* Font size slider */}
+          <div className="px-3 py-2 border-b border-gray-100 shrink-0">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs text-gray-500">大小</span>
+              <span className="text-xs text-gray-800 font-medium">{currentSize}px</span>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={FONT_SIZES.length - 1}
+              step={1}
+              value={sliderValue >= 0 ? sliderValue : 0}
+              onChange={(e) => {
+                const idx = parseInt(e.target.value);
+                onSettingsChange({ ...settings, [sizeKey]: FONT_SIZES[idx] });
+              }}
+              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            />
+            <div className="flex justify-between mt-0.5">
+              {FONT_SIZES.map((s) => (
+                <span key={s} className={`text-[10px] ${s === currentSize ? 'text-blue-600 font-medium' : 'text-gray-300'}`}>
+                  {s}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Default option */}

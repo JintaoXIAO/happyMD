@@ -9,6 +9,8 @@ interface NoteRecord {
 export interface Settings {
   fontFamily: string;
   codeFontFamily: string;
+  fontSize: number;
+  codeFontSize: number;
 }
 
 interface HappyNoteDB {
@@ -32,6 +34,8 @@ const SETTINGS_ID = 'user';
 export const DEFAULT_SETTINGS: Settings = {
   fontFamily: 'system-ui',
   codeFontFamily: 'ui-monospace, monospace',
+  fontSize: 16,
+  codeFontSize: 14,
 };
 
 let dbPromise: Promise<IDBPDatabase<HappyNoteDB>> | null = null;
@@ -70,9 +74,13 @@ export async function saveNote(content: string): Promise<void> {
 export async function loadSettings(): Promise<Settings> {
   const db = await getDB();
   const record = await db.get(SETTINGS_STORE, SETTINGS_ID);
-  return record
-    ? { fontFamily: record.fontFamily, codeFontFamily: record.codeFontFamily || DEFAULT_SETTINGS.codeFontFamily }
-    : DEFAULT_SETTINGS;
+  if (!record) return DEFAULT_SETTINGS;
+  return {
+    fontFamily: record.fontFamily || DEFAULT_SETTINGS.fontFamily,
+    codeFontFamily: record.codeFontFamily || DEFAULT_SETTINGS.codeFontFamily,
+    fontSize: record.fontSize || DEFAULT_SETTINGS.fontSize,
+    codeFontSize: record.codeFontSize || DEFAULT_SETTINGS.codeFontSize,
+  };
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {

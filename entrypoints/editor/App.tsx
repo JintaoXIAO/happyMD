@@ -85,7 +85,7 @@ export default function App() {
     <div className="flex flex-col h-screen">
       {/* Editor area */}
       <div className="flex-1 overflow-y-auto flex justify-center">
-        <div className="w-full max-w-4xl" style={{ '--user-font': settings.fontFamily, '--user-code-font': settings.codeFontFamily } as React.CSSProperties}>
+        <div className="w-full max-w-4xl" style={{ '--user-font': settings.fontFamily, '--user-code-font': settings.codeFontFamily, '--user-font-size': `${settings.fontSize}px`, '--user-code-font-size': `${settings.codeFontSize}px` } as React.CSSProperties}>
           <Editor defaultValue={initialContent} onChange={handleChange} />
         </div>
       </div>

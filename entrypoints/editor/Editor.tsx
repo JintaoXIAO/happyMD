@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Crepe, CrepeFeature } from '@milkdown/crepe';
 import { linkInputRule } from './link-input-plugin';
+import { codeBlockCollapsePlugin } from './code-collapse-plugin';
 
 interface EditorProps {
   defaultValue: string;
@@ -44,8 +45,9 @@ export function Editor({ defaultValue, onChange }: EditorProps) {
       });
     });
 
-    // Register custom link input rule plugin
+    // Register custom plugins
     crepe.editor.use(linkInputRule);
+    crepe.editor.use(codeBlockCollapsePlugin);
 
     crepe.create().then(() => {
       crepeRef.current = crepe;
