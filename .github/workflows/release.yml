@@ -21,10 +21,18 @@ jobs:
 
       - run: bun install
 
+      - name: Inject version from tag
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+
       - run: bun run zip
+
+      - name: Rename zip
+        run: mv .output/*-chrome.zip .output/happynote-${GITHUB_REF_NAME#v}-chrome.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: .output/*-chrome.zip
+          files: .output/happynote-*-chrome.zip
           generate_release_notes: true
