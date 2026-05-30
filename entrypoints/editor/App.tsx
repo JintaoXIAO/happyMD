@@ -352,14 +352,16 @@ export default function App() {
             />
           </div>
         </div>
-        {/* Table of Contents */}
-        <TableOfContents
-          visible={tocVisible}
-          items={tocItems}
-          activePos={null}
-          onItemClick={(pos) => editorHandleRef.current?.scrollToPos(pos)}
-        />
       </div>
+
+      {/* Table of Contents - floating */}
+      <TableOfContents
+        visible={tocVisible}
+        items={tocItems}
+        activePos={null}
+        onItemClick={(pos) => editorHandleRef.current?.scrollToPos(pos)}
+        onClose={() => setTocVisible(false)}
+      />
 
       {/* Bottom toolbar + status bar */}
       <div className="flex justify-between items-center px-4 py-1.5 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-400 shrink-0 bg-white dark:bg-[#1a1a1a] relative z-10">

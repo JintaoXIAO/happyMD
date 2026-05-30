@@ -9,25 +9,25 @@ interface TableOfContentsProps {
   items: TocItem[];
   activePos: number | null;
   onItemClick: (pos: number) => void;
+  onClose: () => void;
 }
 
-export function TableOfContents({ visible, items, activePos, onItemClick }: TableOfContentsProps) {
+export function TableOfContents({ visible, items, activePos, onItemClick, onClose }: TableOfContentsProps) {
   if (!visible) return null;
 
   return (
-    <div className="w-48 shrink-0 border-l border-gray-100 dark:border-gray-700 overflow-y-auto py-3 px-2 dark:bg-[#1a1a1a]">
-      <div className="text-xs font-medium text-gray-400 px-2 mb-2">大纲</div>
+    <div className="fixed top-1/3 -translate-y-1/2 left-8 z-40 w-48 max-h-[50vh] overflow-y-auto py-2 px-1 bg-white/80 dark:bg-[#1e1e1e]/80 backdrop-blur-md rounded-lg">
       {items.length === 0 ? (
         <div className="text-xs text-gray-300 dark:text-gray-600 px-2">暂无标题</div>
       ) : (
-        <nav className="flex flex-col gap-0.5">
+        <nav className="flex flex-col">
           {items.map((item, index) => (
             <button
               key={`${item.pos}-${index}`}
-              className={`text-left text-xs py-1 px-2 rounded truncate transition-colors ${
+              className={`text-left text-xs py-0.5 rounded transition-colors truncate ${
                 activePos === item.pos
-                  ? 'text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 font-medium'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'text-gray-900 dark:text-gray-100 font-medium'
+                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
               style={{ paddingLeft: `${(item.level - 1) * 12 + 8}px` }}
               onClick={() => onItemClick(item.pos)}
