@@ -28,11 +28,8 @@ jobs:
 
       - run: bun run zip
 
-      - name: Rename zip
-        run: mv .output/*-chrome.zip .output/happynote-${GITHUB_REF_NAME#v}-chrome.zip
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: .output/happynote-*-chrome.zip
+          files: .output/*-chrome.zip
           generate_release_notes: true
