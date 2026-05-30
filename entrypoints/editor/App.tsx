@@ -17,6 +17,7 @@ import { TableInsertButton } from './TableInsertButton';
 import { LatexPanel } from './LatexPanel';
 import { CommandPalette } from './CommandPalette';
 import { TableOfContents, type TocItem } from './TableOfContents';
+import { ShortcutsPanel } from './ShortcutsPanel';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
 
@@ -26,6 +27,8 @@ export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [tocVisible, setTocVisible] = useState(false);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
   // Multi-document state
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -161,6 +164,54 @@ export default function App() {
     setSaveStatus('saved');
   }, []);
 
+  // Global keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+N: New note
+      if (e.ctrlKey && !e.shiftKey && e.key === 'n') {
+        e.preventDefault();
+        handleCreateNote();
+        return;
+      }
+      // Ctrl+P: Search / Command Palette
+      if (e.ctrlKey && !e.shiftKey && e.key === 'p') {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+        return;
+      }
+      // Ctrl+L: Toggle TOC
+      if (e.ctrlKey && !e.shiftKey && e.key === 'l') {
+        e.preventDefault();
+        setTocVisible((v) => !v);
+        return;
+      }
+      // Ctrl+D: Toggle dark mode
+      if (e.ctrlKey && !e.shiftKey && e.key === 'd') {
+        e.preventDefault();
+        setSettings((prev) => {
+          const newSettings = { ...prev, darkMode: !prev.darkMode };
+          saveSettings(newSettings);
+          return newSettings;
+        });
+        return;
+      }
+      // Ctrl+,: Toggle settings
+      if (e.ctrlKey && !e.shiftKey && e.key === ',') {
+        e.preventDefault();
+        setSettingsOpen((v) => !v);
+        return;
+      }
+      // Ctrl+?: Toggle shortcuts panel
+      if (e.ctrlKey && e.key === '?') {
+        e.preventDefault();
+        setShortcutsOpen((v) => !v);
+        return;
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleCreateNote]);
+
   // Delete a note
   const handleDeleteNote = useCallback(async (id: string) => {
     // Don't delete the last note
@@ -221,6 +272,9 @@ export default function App() {
         onClose={() => setPaletteOpen(false)}
       />
 
+      {/* Shortcuts Panel */}
+      <ShortcutsPanel open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+
       {/* Editor area + TOC */}
       <div className="flex-1 overflow-hidden flex">
         <div className="flex-1 overflow-y-auto flex justify-center">
@@ -260,7 +314,7 @@ export default function App() {
           <button
             onClick={() => { handleCreateNote(); }}
             className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
-            title="新建笔记"
+            title="新建笔记 (Ctrl+N)"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -270,13 +324,13 @@ export default function App() {
           <button
             onClick={() => setPaletteOpen((v) => !v)}
             className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
-            title="搜索笔记"
+            title="搜索笔记 (Ctrl+P)"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
           </button>
-          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} />
+          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
           <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
         </div>
@@ -291,7 +345,7 @@ export default function App() {
               saveSettings(newSettings);
             }}
             className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 dark:hover:bg-gray-700"
-            title={settings.darkMode ? '切换亮色模式' : '切换暗黑模式'}
+            title={settings.darkMode ? '切换亮色模式 (Ctrl+D)' : '切换暗黑模式 (Ctrl+D)'}
           >
             {settings.darkMode ? (
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -307,7 +361,7 @@ export default function App() {
           <button
             onClick={() => setTocVisible((v) => !v)}
             className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${tocVisible ? 'text-gray-600' : 'text-gray-400'} hover:text-gray-600`}
-            title="大纲"
+            title="大纲 (Ctrl+L)"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12M8.25 17.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -316,6 +370,16 @@ export default function App() {
           <span className="transition-opacity duration-300">
             {statusText[saveStatus]}
           </span>
+          {/* Shortcuts help */}
+          <button
+            onClick={() => setShortcutsOpen((v) => !v)}
+            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600"
+            title="快捷键帮助 (Ctrl+?)"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

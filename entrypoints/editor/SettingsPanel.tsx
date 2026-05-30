@@ -12,10 +12,17 @@ type FontTarget = 'fontFamily' | 'codeFontFamily';
 interface SettingsPanelProps {
   settings: Settings;
   onSettingsChange: (settings: Settings) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps) {
-  const [open, setOpen] = useState(false);
+export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen, onOpenChange }: SettingsPanelProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = (v: boolean) => {
+    setInternalOpen(v);
+    onOpenChange?.(v);
+  };
   const [fonts, setFonts] = useState<string[]>([]);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [fontsError, setFontsError] = useState<string | null>(null);
