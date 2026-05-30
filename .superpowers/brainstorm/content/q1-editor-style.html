@@ -1,0 +1,26 @@
+<h2>编辑器交互风格</h2>
+<p class="subtitle">Typora 的核心是"所见即所得"，但实现方式有几种：</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>纯 WYSIWYG（推荐）</h3>
+      <p>像 Typora 一样，输入 Markdown 语法后立刻渲染。例如输入 <code>## </code> 后文字直接变成标题样式，输入 <code>**bold**</code> 直接变粗体。没有源码视图。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>实时预览（左右分栏）</h3>
+      <p>左边写 Markdown 源码，右边实时渲染预览。类似 VS Code 的 Markdown 预览。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>混合模式</h3>
+      <p>默认 WYSIWYG，但可以切换到源码模式查看/编辑原始 Markdown。像 Typora 的源码模式切换。</p>
+    </div>
+  </div>
+</div>

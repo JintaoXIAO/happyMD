@@ -1,0 +1,26 @@
+<h2>数据存在哪里？</h2>
+<p class="subtitle">作为最简版本，笔记内容如何保存</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>浏览器 LocalStorage（推荐）</h3>
+      <p>最简单。数据自动保存在浏览器本地，关闭后再打开内容还在。无需任何后端。限制约 5MB。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>IndexedDB</h3>
+      <p>浏览器本地数据库，容量更大（几百MB），适合存多篇笔记。稍微复杂一点，但扩展性更好。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>仅内存（不持久化）</h3>
+      <p>最极简——关掉 Tab 就没了。用户需要手动复制或导出。适合临时草稿。</p>
+    </div>
+  </div>
+</div>

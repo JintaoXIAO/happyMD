@@ -1,0 +1,54 @@
+<h2>HappyNote 架构设计</h2>
+<p class="subtitle">Chrome 扩展 + React + Milkdown WYSIWYG 编辑器</p>
+
+<div class="mockup">
+  <div class="mockup-header">整体架构</div>
+  <div class="mockup-body" style="padding: 24px; font-family: monospace; font-size: 13px; line-height: 2;">
+    <div style="display: flex; gap: 32px; align-items: flex-start;">
+      <div style="border: 2px solid #4a9eff; border-radius: 8px; padding: 16px; min-width: 160px;">
+        <strong style="color: #4a9eff;">Chrome Extension</strong><br>
+        ├── manifest.json (MV3)<br>
+        ├── background.js<br>
+        │   └── 点击图标 → 打开新 Tab<br>
+        └── newtab page<br>
+            └── React App
+      </div>
+      <div style="font-size: 24px; align-self: center;">→</div>
+      <div style="border: 2px solid #f59e0b; border-radius: 8px; padding: 16px; min-width: 160px;">
+        <strong style="color: #f59e0b;">React App (新 Tab)</strong><br>
+        ├── Milkdown Editor<br>
+        │   ├── 核心格式插件<br>
+        │   ├── 代码块高亮<br>
+        │   └── 链接/图片<br>
+        └── 极简 UI 外壳
+      </div>
+      <div style="font-size: 24px; align-self: center;">→</div>
+      <div style="border: 2px solid #10b981; border-radius: 8px; padding: 16px; min-width: 160px;">
+        <strong style="color: #10b981;">数据层</strong><br>
+        └── IndexedDB<br>
+            ├── 自动保存<br>
+            └── 内容持久化
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 32px;"></div>
+
+<div class="mockup">
+  <div class="mockup-header">编辑器界面预览（极简白纸风格）</div>
+  <div class="mockup-body" style="background: #fff; min-height: 300px; padding: 0;">
+    <div style="border-bottom: 1px solid #f0f0f0; padding: 8px 24px; color: #999; font-size: 12px; display: flex; justify-content: space-between;">
+      <span>HappyNote</span>
+      <span>自动保存 ✓</span>
+    </div>
+    <div style="padding: 48px 80px; font-family: 'Georgia', serif; line-height: 1.8;">
+      <h1 style="font-size: 28px; font-weight: 600; margin-bottom: 16px; color: #1a1a1a;">我的笔记标题</h1>
+      <p style="color: #333; margin-bottom: 12px;">这里是正文内容，支持<strong>加粗</strong>、<em>斜体</em>等格式。输入 Markdown 语法会自动渲染成最终样式。</p>
+      <blockquote style="border-left: 3px solid #ddd; padding-left: 16px; color: #666; margin: 12px 0;">引用块效果</blockquote>
+      <div style="background: #f6f8fa; border-radius: 4px; padding: 12px 16px; font-family: 'Fira Code', monospace; font-size: 13px; color: #24292e; margin: 12px 0;">
+        <span style="color: #d73a49;">const</span> <span style="color: #6f42c1;">greeting</span> = <span style="color: #032f62;">"Hello World"</span>;
+      </div>
+    </div>
+  </div>
+</div>

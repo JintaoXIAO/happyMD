@@ -1,0 +1,33 @@
+<h2>编辑器核心引擎</h2>
+<p class="subtitle">实现 WYSIWYG Markdown 编辑，底层用什么技术</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Milkdown（推荐）</h3>
+      <p>基于 ProseMirror 的 Markdown WYSIWYG 编辑器框架。插件化架构，开箱即用的 Markdown 支持，主题可定制。轻量且现代。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Tiptap</h3>
+      <p>同样基于 ProseMirror，社区成熟，生态丰富。需要自己配置 Markdown 序列化/反序列化，但灵活度更高。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Vditor</h3>
+      <p>国产开源 Markdown 编辑器，内置所见即所得模式、即时渲染模式。中文友好，功能完善，开箱即用。体积较大。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="d" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>自研 contenteditable</h3>
+      <p>基于 contenteditable + Markdown 解析器自己实现。完全掌控，但开发量巨大，坑多。不推荐 MVP。</p>
+    </div>
+  </div>
+</div>

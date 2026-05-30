@@ -1,0 +1,47 @@
+<h2>MVP 功能范围</h2>
+<p class="subtitle">第一版要支持哪些 Markdown 功能？</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="core" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>核心格式（必选）</h3>
+      <p>标题（h1-h6）、加粗、斜体、删除线、有序/无序列表、引用块、分割线、行内代码</p>
+    </div>
+  </div>
+  <div class="option" data-choice="code" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>代码块（语法高亮）</h3>
+      <p>围栏代码块 + 语法高亮显示</p>
+    </div>
+  </div>
+  <div class="option" data-choice="link" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>链接 & 图片</h3>
+      <p>超链接、图片插入（支持粘贴图片自动转 base64 存储）</p>
+    </div>
+  </div>
+  <div class="option" data-choice="table" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>表格</h3>
+      <p>Markdown 表格的可视化编辑</p>
+    </div>
+  </div>
+  <div class="option" data-choice="task" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>任务列表</h3>
+      <p>可勾选的 checkbox 列表 <code>- [ ] todo</code></p>
+    </div>
+  </div>
+  <div class="option" data-choice="export" onclick="toggleSelect(this)">
+    <div class="letter">E</div>
+    <div class="content">
+      <h3>导出功能</h3>
+      <p>导出为 .md 文件下载到本地</p>
+    </div>
+  </div>
+</div>
