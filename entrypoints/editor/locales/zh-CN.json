@@ -58,6 +58,7 @@
   "shortcuts.italic": "斜体",
   "shortcuts.undo": "撤销",
   "shortcuts.redo": "重做",
+  "shortcuts.copy": "复制 Markdown",
 
   "settings.textFont": "正文字体",
   "settings.codeFont": "代码字体",
@@ -102,6 +103,12 @@
   "confirm.defaultCancel": "取消",
 
   "toc.untitled": "无标题",
+
+  "copy.button": "复制内容",
+  "copy.markdown": "复制 Markdown",
+  "copy.richText": "复制为富文本",
+  "copy.success": "已复制",
+  "copy.empty": "当前笔记无内容",
 
   "latex.sym.fraction": "分数",
   "latex.sym.sqrt": "平方根",

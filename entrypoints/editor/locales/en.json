@@ -58,6 +58,7 @@
   "shortcuts.italic": "Italic",
   "shortcuts.undo": "Undo",
   "shortcuts.redo": "Redo",
+  "shortcuts.copy": "Copy Markdown",
 
   "settings.textFont": "Text Font",
   "settings.codeFont": "Code Font",
@@ -102,6 +103,12 @@
   "confirm.defaultCancel": "Cancel",
 
   "toc.untitled": "Untitled",
+
+  "copy.button": "Copy Content",
+  "copy.markdown": "Copy Markdown",
+  "copy.richText": "Copy as Rich Text",
+  "copy.success": "Copied",
+  "copy.empty": "Note is empty",
 
   "latex.sym.fraction": "Fraction",
   "latex.sym.sqrt": "Square root",

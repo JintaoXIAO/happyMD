@@ -21,6 +21,7 @@ import { CommandPalette } from './CommandPalette';
 import { TableOfContents, type TocItem } from './TableOfContents';
 import { ShortcutsPanel } from './ShortcutsPanel';
 import { ExportMenu } from './ExportMenu';
+import { CopyButton } from './CopyButton';
 import { ConfirmDialog } from './ConfirmDialog';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
@@ -216,6 +217,15 @@ export default function App() {
         setShortcutsOpen((v) => !v);
         return;
       }
+      // Ctrl+Shift+C: Copy markdown
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        const md = latestContentRef.current;
+        if (md.trim()) {
+          navigator.clipboard.writeText(md);
+        }
+        return;
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -390,6 +400,7 @@ export default function App() {
           </button>
           <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
           <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
+          <CopyButton getMarkdown={() => latestContentRef.current} />
           <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
         </div>
 

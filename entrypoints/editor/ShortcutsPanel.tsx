@@ -18,6 +18,7 @@ function getShortcuts() {
     { key: 'Ctrl+I', desc: t('shortcuts.italic') },
     { key: 'Ctrl+Z', desc: t('shortcuts.undo') },
     { key: 'Ctrl+Shift+Z', desc: t('shortcuts.redo') },
+    { key: 'Ctrl+Shift+C', desc: t('shortcuts.copy') },
   ];
 }
 
