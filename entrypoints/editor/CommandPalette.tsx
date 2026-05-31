@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { NoteRecord } from './db';
+import { t } from './i18n';
 
 interface CommandPaletteProps {
   open: boolean;
@@ -15,15 +16,15 @@ function formatRelativeTime(timestamp: number): string {
   const now = Date.now();
   const diff = now - timestamp;
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return '刚刚';
-  if (minutes < 60) return `${minutes}分钟前`;
+  if (minutes < 1) return t('time.justNow');
+  if (minutes < 60) return t('time.minutesAgo', { n: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}小时前`;
+  if (hours < 24) return t('time.hoursAgo', { n: hours });
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}天前`;
+  if (days < 30) return t('time.daysAgo', { n: days });
   const months = Math.floor(days / 30);
-  if (months < 12) return `${months}个月前`;
-  return `${Math.floor(months / 12)}年前`;
+  if (months < 12) return t('time.monthsAgo', { n: months });
+  return t('time.yearsAgo', { n: Math.floor(months / 12) });
 }
 
 export function CommandPalette({
@@ -119,7 +120,7 @@ export function CommandPalette({
             ref={inputRef}
             type="text"
             className="flex-1 text-sm outline-none placeholder-gray-400 bg-transparent dark:text-gray-200"
-            placeholder="搜索笔记... 输入 #tag 搜索标签"
+            placeholder={t('palette.placeholder')}
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -134,9 +135,9 @@ export function CommandPalette({
               onCreateNote();
               onClose();
             }}
-            title="新建笔记"
+            title={t('note.new')}
           >
-            + 新建
+            {t('palette.newNote')}
           </button>
         </div>
 
@@ -144,7 +145,7 @@ export function CommandPalette({
         <div ref={listRef} className="max-h-80 overflow-y-auto">
           {filteredNotes.length === 0 ? (
             <div className="px-4 py-6 text-center text-sm text-gray-400">
-              {query ? '没有找到匹配的笔记' : '暂无笔记'}
+              {query ? t('palette.noMatch') : t('palette.empty')}
             </div>
           ) : (
             filteredNotes.map((note, index) => (
@@ -162,10 +163,10 @@ export function CommandPalette({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className={`text-sm truncate ${note.id === activeNoteId ? 'font-medium text-gray-800 dark:text-gray-200' : 'text-gray-700 dark:text-gray-300'}`}>
-                      {note.title || '无标题笔记'}
+                      {note.title || t('note.untitled')}
                     </span>
                     {note.id === activeNoteId && (
-                      <span className="text-xs text-gray-400">当前</span>
+                      <span className="text-xs text-gray-400">{t('note.current')}</span>
                     )}
                   </div>
                   <div className="text-xs text-gray-400 mt-0.5">
@@ -179,7 +180,7 @@ export function CommandPalette({
                     e.stopPropagation();
                     onDeleteNote(note.id);
                   }}
-                  title="删除"
+                  title={t('note.delete')}
                 >
                   ×
                 </button>
@@ -190,9 +191,9 @@ export function CommandPalette({
 
         {/* Footer hint */}
         <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-400 flex gap-3">
-          <span>↑↓ 导航</span>
-          <span>↵ 打开</span>
-          <span>Esc 关闭</span>
+          <span>{t('palette.nav')}</span>
+          <span>{t('palette.open')}</span>
+          <span>{t('palette.close')}</span>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { t } from './i18n';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -15,8 +16,8 @@ export function ConfirmDialog({
   open,
   title,
   message,
-  confirmText = '确定',
-  cancelText = '取消',
+  confirmText = t('confirm.defaultConfirm'),
+  cancelText = t('confirm.defaultCancel'),
   danger = false,
   onConfirm,
   onCancel,

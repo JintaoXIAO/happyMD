@@ -7,6 +7,7 @@ import { linkInputRule } from './link-input-plugin';
 import { codeBlockCollapsePlugin } from './code-collapse-plugin';
 import { imageURLPlugin } from './image-url-plugin';
 import { saveImage, getImage, IMAGE_URL_PREFIX } from './db';
+import { t } from './i18n';
 import type { TocItem } from './TableOfContents';
 
 interface EditorProps {
@@ -109,7 +110,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, not
       },
       featureConfigs: {
         [CrepeFeature.Placeholder]: {
-          text: '开始写点什么...',
+          text: t('editor.placeholder'),
         },
         [CrepeFeature.ImageBlock]: {
           onUpload: async (file: File) => {

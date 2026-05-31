@@ -1,3 +1,5 @@
+import { t } from './i18n';
+
 export interface TocItem {
   level: number;
   text: string;
@@ -18,7 +20,7 @@ export function TableOfContents({ visible, items, activePos, onItemClick, onClos
   return (
     <div className="fixed top-1/3 -translate-y-1/2 left-8 z-40 w-48 max-h-[50vh] overflow-y-auto py-2 px-1 bg-white/80 dark:bg-[#1e1e1e]/80 backdrop-blur-md rounded-lg">
       {items.length === 0 ? (
-        <div className="text-xs text-gray-300 dark:text-gray-600 px-2">暂无标题</div>
+        <div className="text-xs text-gray-300 dark:text-gray-600 px-2">{t('toc.empty')}</div>
       ) : (
         <nav className="flex flex-col">
           {items.map((item, index) => (
@@ -33,7 +35,7 @@ export function TableOfContents({ visible, items, activePos, onItemClick, onClos
               onClick={() => onItemClick(item.pos)}
               title={item.text}
             >
-              {item.text || '无标题'}
+              {item.text || t('toc.untitled')}
             </button>
           ))}
         </nav>

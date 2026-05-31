@@ -1,11 +1,12 @@
 import { zipSync, strToU8 } from 'fflate';
 import { getNote, listNotes, getImage, IMAGE_URL_PREFIX } from './db';
+import { t } from './i18n';
 
 /**
  * Sanitize a string for use as a filename
  */
 function sanitizeFilename(name: string): string {
-  return name.replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').trim() || '无标题笔记';
+  return name.replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').trim() || t('note.untitled');
 }
 
 /**

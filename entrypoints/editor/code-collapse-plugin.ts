@@ -1,6 +1,7 @@
 import { $prose } from '@milkdown/kit/utils';
 import { Plugin, PluginKey } from '@milkdown/kit/prose/state';
 import { Decoration, DecorationSet, type EditorView } from '@milkdown/kit/prose/view';
+import { t } from './i18n';
 
 const codeBlockCollapseKey = new PluginKey('code-block-collapse');
 
@@ -26,8 +27,8 @@ export const codeBlockCollapsePlugin = $prose(() => {
         const widget = Decoration.widget(pos, () => {
           const btn = document.createElement('button');
           btn.className = `code-collapse-btn ${isCollapsed ? 'collapsed' : ''}`;
-          btn.textContent = isCollapsed ? '▶ 展开代码' : '▼ 收起代码';
-          btn.title = isCollapsed ? '展开代码块' : '收起代码块';
+          btn.textContent = isCollapsed ? t('code.expand') : t('code.collapse');
+          btn.title = isCollapsed ? t('code.expandTitle') : t('code.collapseTitle');
           btn.addEventListener('mousedown', (e) => {
             e.preventDefault();
             e.stopPropagation();

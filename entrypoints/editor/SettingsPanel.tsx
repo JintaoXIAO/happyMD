@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { Settings } from './db';
+import { t } from './i18n';
 
 interface FontInfo {
   family: string;
@@ -58,7 +59,7 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
     if (fontsLoaded) return;
 
     if (!('queryLocalFonts' in window)) {
-      setFontsError('浏览器不支持读取本地字体');
+      setFontsError(t('settings.fontNotSupported'));
       setFontsLoaded(true);
       return;
     }
@@ -72,9 +73,9 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
       setFontsLoaded(true);
     } catch (err: any) {
       if (err.name === 'NotAllowedError') {
-        setFontsError('用户拒绝了字体访问权限');
+        setFontsError(t('settings.fontPermissionDenied'));
       } else {
-        setFontsError('无法读取系统字体');
+        setFontsError(t('settings.fontLoadError'));
       }
       setFontsLoaded(true);
     }
@@ -91,7 +92,7 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
 
   const currentValue = settings[activeTab];
   const defaultValue = activeTab === 'fontFamily' ? 'system-ui' : 'ui-monospace, monospace';
-  const defaultLabel = activeTab === 'fontFamily' ? '系统默认' : '系统等宽';
+  const defaultLabel = activeTab === 'fontFamily' ? t('settings.systemDefault') : t('settings.systemMono');
 
   // Font size for current tab
   const sizeKey = activeTab === 'fontFamily' ? 'fontSize' : 'codeFontSize';
@@ -118,7 +119,7 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
       <button
         onClick={() => setOpen(!open)}
         className="p-1 rounded hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
-        title="字体设置"
+        title={t('toolbar.fontSettings')}
       >
         <svg
           width="14"
@@ -148,7 +149,7 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              正文字体
+              {t('settings.textFont')}
             </button>
             <button
               onClick={() => { setActiveTab('codeFontFamily'); setSearch(''); }}
@@ -158,19 +159,19 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              代码字体
+              {t('settings.codeFont')}
             </button>
           </div>
 
           {/* Current font indicator */}
           <div className="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100 shrink-0">
-            当前: <span className="text-gray-800 font-medium" style={{ fontFamily: currentValue }}>{currentDisplayName}</span>
+            {t('settings.current')}: <span className="text-gray-800 font-medium" style={{ fontFamily: currentValue }}>{currentDisplayName}</span>
           </div>
 
           {/* Font size slider */}
           <div className="px-3 py-2 border-b border-gray-100 shrink-0">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-gray-500">大小</span>
+              <span className="text-xs text-gray-500">{t('settings.size')}</span>
               <span className="text-xs text-gray-800 font-medium">{currentSize}px</span>
             </div>
             <input
@@ -220,7 +221,7 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="搜索字体..."
+              placeholder={t('settings.searchFont')}
               className="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:border-blue-300"
             />
           </div>
@@ -231,11 +232,11 @@ export function SettingsPanel({ settings, onSettingsChange, open: controlledOpen
               <div className="px-3 py-2 text-xs text-red-500">{fontsError}</div>
             )}
             {!fontsLoaded && !fontsError && (
-              <div className="px-3 py-2 text-xs text-gray-400">加载字体中...</div>
+              <div className="px-3 py-2 text-xs text-gray-400">{t('settings.loadingFonts')}</div>
             )}
             {fontsLoaded && !fontsError && filteredFonts.length === 0 && (
               <div className="px-3 py-2 text-xs text-gray-400">
-                {search ? '无匹配字体' : '未找到系统字体'}
+                {search ? t('settings.noMatch') : t('settings.noFonts')}
               </div>
             )}
             {filteredFonts.map((family) => {

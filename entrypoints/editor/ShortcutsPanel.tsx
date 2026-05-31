@@ -1,21 +1,25 @@
+import { t } from './i18n';
+
 interface ShortcutsPanelProps {
   open: boolean;
   onClose: () => void;
 }
 
-const shortcuts = [
-  { key: 'Ctrl+N', desc: '新建笔记' },
-  { key: 'Ctrl+P', desc: '搜索 / 切换笔记' },
-  { key: 'Ctrl+L', desc: '切换大纲' },
-  { key: 'Ctrl+D', desc: '切换暗黑模式' },
-  { key: 'Ctrl+,', desc: '字体设置' },
-  { key: 'Ctrl+?', desc: '快捷键帮助' },
-  { key: '', desc: '' },
-  { key: 'Ctrl+B', desc: '粗体' },
-  { key: 'Ctrl+I', desc: '斜体' },
-  { key: 'Ctrl+Z', desc: '撤销' },
-  { key: 'Ctrl+Shift+Z', desc: '重做' },
-];
+function getShortcuts() {
+  return [
+    { key: 'Ctrl+N', desc: t('shortcuts.newNote') },
+    { key: 'Ctrl+P', desc: t('shortcuts.search') },
+    { key: 'Ctrl+L', desc: t('shortcuts.toc') },
+    { key: 'Ctrl+D', desc: t('shortcuts.darkMode') },
+    { key: 'Ctrl+,', desc: t('shortcuts.fontSettings') },
+    { key: 'Ctrl+?', desc: t('shortcuts.help') },
+    { key: '', desc: '' },
+    { key: 'Ctrl+B', desc: t('shortcuts.bold') },
+    { key: 'Ctrl+I', desc: t('shortcuts.italic') },
+    { key: 'Ctrl+Z', desc: t('shortcuts.undo') },
+    { key: 'Ctrl+Shift+Z', desc: t('shortcuts.redo') },
+  ];
+}
 
 export function ShortcutsPanel({ open, onClose }: ShortcutsPanelProps) {
   if (!open) return null;
@@ -27,7 +31,7 @@ export function ShortcutsPanel({ open, onClose }: ShortcutsPanelProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">快捷键</h3>
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">{t('shortcuts.title')}</h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -36,7 +40,7 @@ export function ShortcutsPanel({ open, onClose }: ShortcutsPanelProps) {
           </button>
         </div>
         <div className="space-y-2">
-          {shortcuts.map((item, i) =>
+          {getShortcuts().map((item, i) =>
             item.key === '' ? (
               <hr key={i} className="border-gray-100 dark:border-gray-700" />
             ) : (

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { t } from './i18n';
 
 interface LatexSymbol {
   label: string;
@@ -13,7 +14,7 @@ interface LatexCategory {
 
 const LATEX_CATEGORIES: LatexCategory[] = [
   {
-    name: '希腊字母',
+    name: t('latex.greek'),
     symbols: [
       { label: 'α', latex: '\\alpha' },
       { label: 'β', latex: '\\beta' },
@@ -42,7 +43,7 @@ const LATEX_CATEGORIES: LatexCategory[] = [
     ],
   },
   {
-    name: '运算符',
+    name: t('latex.operators'),
     symbols: [
       { label: '±', latex: '\\pm' },
       { label: '×', latex: '\\times' },
@@ -67,7 +68,7 @@ const LATEX_CATEGORIES: LatexCategory[] = [
     ],
   },
   {
-    name: '箭头',
+    name: t('latex.arrows'),
     symbols: [
       { label: '←', latex: '\\leftarrow' },
       { label: '→', latex: '\\rightarrow' },
@@ -82,33 +83,33 @@ const LATEX_CATEGORIES: LatexCategory[] = [
     ],
   },
   {
-    name: '结构',
+    name: t('latex.structure'),
     symbols: [
-      { label: 'a/b', latex: '\\frac{a}{b}', display: '分数' },
-      { label: '√', latex: '\\sqrt{x}', display: '平方根' },
-      { label: 'ⁿ√', latex: '\\sqrt[n]{x}', display: 'n次根' },
-      { label: 'x²', latex: 'x^{2}', display: '上标' },
-      { label: 'xₙ', latex: 'x_{n}', display: '下标' },
-      { label: 'Σ', latex: '\\sum_{i=1}^{n}', display: '求和' },
-      { label: '∏', latex: '\\prod_{i=1}^{n}', display: '连乘' },
-      { label: '∫', latex: '\\int_{a}^{b}', display: '积分' },
-      { label: '∬', latex: '\\iint', display: '二重积分' },
-      { label: 'lim', latex: '\\lim_{x \\to \\infty}', display: '极限' },
-      { label: '()', latex: '\\left( \\right)', display: '括号' },
-      { label: '[]', latex: '\\left[ \\right]', display: '方括号' },
-      { label: '{}', latex: '\\left\\{ \\right\\}', display: '花括号' },
-      { label: '||', latex: '\\left| \\right|', display: '绝对值' },
+      { label: 'a/b', latex: '\\frac{a}{b}', display: t('latex.sym.fraction') },
+      { label: '√', latex: '\\sqrt{x}', display: t('latex.sym.sqrt') },
+      { label: 'ⁿ√', latex: '\\sqrt[n]{x}', display: t('latex.sym.nthRoot') },
+      { label: 'x²', latex: 'x^{2}', display: t('latex.sym.superscript') },
+      { label: 'xₙ', latex: 'x_{n}', display: t('latex.sym.subscript') },
+      { label: 'Σ', latex: '\\sum_{i=1}^{n}', display: t('latex.sym.sum') },
+      { label: '∏', latex: '\\prod_{i=1}^{n}', display: t('latex.sym.product') },
+      { label: '∫', latex: '\\int_{a}^{b}', display: t('latex.sym.integral') },
+      { label: '∬', latex: '\\iint', display: t('latex.sym.doubleIntegral') },
+      { label: 'lim', latex: '\\lim_{x \\to \\infty}', display: t('latex.sym.limit') },
+      { label: '()', latex: '\\left( \\right)', display: t('latex.sym.parentheses') },
+      { label: '[]', latex: '\\left[ \\right]', display: t('latex.sym.brackets') },
+      { label: '{}', latex: '\\left\\{ \\right\\}', display: t('latex.sym.braces') },
+      { label: '||', latex: '\\left| \\right|', display: t('latex.sym.absoluteValue') },
     ],
   },
   {
-    name: '常用公式',
+    name: t('latex.common'),
     symbols: [
-      { label: 'E=mc²', latex: 'E = mc^2', display: '质能方程' },
-      { label: 'a²+b²=c²', latex: 'a^2 + b^2 = c^2', display: '勾股定理' },
-      { label: '求根', latex: 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}', display: '一元二次' },
-      { label: '矩阵', latex: '\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', display: '2×2矩阵' },
-      { label: '行列式', latex: '\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}', display: '行列式' },
-      { label: '分段', latex: 'f(x) = \\begin{cases} x & x \\geq 0 \\\\ -x & x < 0 \\end{cases}', display: '分段函数' },
+      { label: 'E=mc²', latex: 'E = mc^2', display: t('latex.sym.massEnergy') },
+      { label: 'a²+b²=c²', latex: 'a^2 + b^2 = c^2', display: t('latex.sym.pythagorean') },
+      { label: t('latex.sym.quadraticLabel'), latex: 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}', display: t('latex.sym.quadratic') },
+      { label: t('latex.sym.matrixLabel'), latex: '\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', display: t('latex.sym.matrix') },
+      { label: t('latex.sym.determinantLabel'), latex: '\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}', display: t('latex.sym.determinant') },
+      { label: t('latex.sym.piecewiseLabel'), latex: 'f(x) = \\begin{cases} x & x \\geq 0 \\\\ -x & x < 0 \\end{cases}', display: t('latex.sym.piecewise') },
     ],
   },
 ];
@@ -151,7 +152,7 @@ export function LatexPanel({ onInsert }: LatexPanelProps) {
       <button
         onClick={() => setOpen(!open)}
         className="p-1 rounded hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
-        title="插入公式"
+        title={t('toolbar.insertLatex')}
       >
         <svg
           width="14"
@@ -222,7 +223,7 @@ export function LatexPanel({ onInsert }: LatexPanelProps) {
               }}
               className="w-full text-xs text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded py-1.5 transition-colors"
             >
-              插入块级公式 ($$...$$)
+              {t('latex.insertBlock')} ($$...$$)
             </button>
           </div>
         </div>

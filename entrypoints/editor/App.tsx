@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { t } from './i18n';
 import { Editor, type EditorHandle } from './Editor';
 import {
   createNote,
@@ -274,17 +275,17 @@ export default function App() {
   }, []);
 
   const statusText: Record<SaveStatus, string> = {
-    saved: '✓ 已保存',
-    saving: '保存中...',
+    saved: t('app.saved'),
+    saving: t('app.saving'),
     unsaved: '',
-    error: '✗ 保存失败',
+    error: t('app.saveError'),
   };
 
   if (initialContent === null) {
     return (
       <div className="flex flex-col h-screen">
         <div className="flex items-center justify-center h-full text-sm text-gray-400">
-          加载中...
+          {t('app.loading')}
         </div>
       </div>
     );
@@ -309,10 +310,10 @@ export default function App() {
       {/* Delete Confirmation */}
       <ConfirmDialog
         open={deleteConfirmId !== null}
-        title="删除笔记"
-        message="确定要删除这篇笔记吗？删除后无法恢复。"
-        confirmText="删除"
-        cancelText="取消"
+        title={t('confirm.delete.title')}
+        message={t('confirm.delete.message')}
+        confirmText={t('confirm.delete.confirm')}
+        cancelText={t('confirm.delete.cancel')}
         danger
         onConfirm={confirmDeleteNote}
         onCancel={() => setDeleteConfirmId(null)}
@@ -321,10 +322,10 @@ export default function App() {
       {/* Clear All Confirmation */}
       <ConfirmDialog
         open={clearAllConfirm}
-        title="清空所有笔记"
-        message="确定要清空所有笔记吗？所有笔记和图片都将被永久删除，无法恢复。建议先导出备份。"
-        confirmText="全部清空"
-        cancelText="取消"
+        title={t('confirm.clearAll.title')}
+        message={t('confirm.clearAll.message')}
+        confirmText={t('confirm.clearAll.confirm')}
+        cancelText={t('confirm.clearAll.cancel')}
         danger
         onConfirm={confirmClearAll}
         onCancel={() => setClearAllConfirm(false)}
@@ -371,7 +372,7 @@ export default function App() {
           <button
             onClick={() => { handleCreateNote(); }}
             className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
-            title="新建笔记 (Ctrl+N)"
+            title={t('toolbar.newNote')}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -381,7 +382,7 @@ export default function App() {
           <button
             onClick={() => setPaletteOpen((v) => !v)}
             className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
-            title="搜索笔记 (Ctrl+P)"
+            title={t('toolbar.search')}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -403,7 +404,7 @@ export default function App() {
               saveSettings(newSettings);
             }}
             className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 dark:hover:bg-gray-700"
-            title={settings.darkMode ? '切换亮色模式 (Ctrl+D)' : '切换暗黑模式 (Ctrl+D)'}
+            title={settings.darkMode ? t('toolbar.lightMode') : t('toolbar.darkMode')}
           >
             {settings.darkMode ? (
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -419,7 +420,7 @@ export default function App() {
           <button
             onClick={() => setTocVisible((v) => !v)}
             className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${tocVisible ? 'text-gray-600' : 'text-gray-400'} hover:text-gray-600`}
-            title="大纲 (Ctrl+L)"
+            title={t('toolbar.toc')}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12M8.25 17.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -432,7 +433,7 @@ export default function App() {
           <button
             onClick={() => setShortcutsOpen((v) => !v)}
             className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600"
-            title="快捷键帮助 (Ctrl+?)"
+            title={t('toolbar.shortcuts')}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />

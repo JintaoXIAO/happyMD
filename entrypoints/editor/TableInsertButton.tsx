@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { t } from './i18n';
 
 interface TableInsertButtonProps {
   onInsert: (row: number, col: number) => void;
@@ -40,7 +41,7 @@ export function TableInsertButton({ onInsert }: TableInsertButtonProps) {
       <button
         onClick={() => setOpen(!open)}
         className="p-1 rounded hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
-        title="插入表格"
+        title={t('toolbar.insertTable')}
       >
         <svg
           width="14"
@@ -64,8 +65,8 @@ export function TableInsertButton({ onInsert }: TableInsertButtonProps) {
         <div className="absolute bottom-full left-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-2">
           <div className="text-xs text-gray-500 text-center mb-1.5">
             {hoverRow > 0 && hoverCol > 0
-              ? `${hoverRow} × ${hoverCol}`
-              : '选择行列数'}
+              ? t('table.grid', { row: hoverRow, col: hoverCol })
+              : t('table.title')}
           </div>
           <div
             className="grid gap-0.5"
