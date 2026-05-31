@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { t } from './i18n';
+import katex from 'katex';
+
+// Pre-render KaTeX HTML at module level (avoids re-render on each open)
+const renderedLatexCache: Record<string, string> = {};
 
 interface LatexSymbol {
   label: string;
@@ -9,6 +13,7 @@ interface LatexSymbol {
 
 interface LatexCategory {
   name: string;
+  layout?: 'grid' | 'rendered' | 'rendered-grid';
   symbols: LatexSymbol[];
 }
 
@@ -84,32 +89,34 @@ const LATEX_CATEGORIES: LatexCategory[] = [
   },
   {
     name: t('latex.structure'),
+    layout: 'rendered-grid',
     symbols: [
-      { label: 'a/b', latex: '\\frac{a}{b}', display: t('latex.sym.fraction') },
-      { label: '√', latex: '\\sqrt{x}', display: t('latex.sym.sqrt') },
-      { label: 'ⁿ√', latex: '\\sqrt[n]{x}', display: t('latex.sym.nthRoot') },
-      { label: 'x²', latex: 'x^{2}', display: t('latex.sym.superscript') },
-      { label: 'xₙ', latex: 'x_{n}', display: t('latex.sym.subscript') },
-      { label: 'Σ', latex: '\\sum_{i=1}^{n}', display: t('latex.sym.sum') },
-      { label: '∏', latex: '\\prod_{i=1}^{n}', display: t('latex.sym.product') },
-      { label: '∫', latex: '\\int_{a}^{b}', display: t('latex.sym.integral') },
-      { label: '∬', latex: '\\iint', display: t('latex.sym.doubleIntegral') },
-      { label: 'lim', latex: '\\lim_{x \\to \\infty}', display: t('latex.sym.limit') },
-      { label: '()', latex: '\\left( \\right)', display: t('latex.sym.parentheses') },
-      { label: '[]', latex: '\\left[ \\right]', display: t('latex.sym.brackets') },
-      { label: '{}', latex: '\\left\\{ \\right\\}', display: t('latex.sym.braces') },
-      { label: '||', latex: '\\left| \\right|', display: t('latex.sym.absoluteValue') },
+      { label: 'a/b', latex: '\\frac{a}{b}' },
+      { label: '√', latex: '\\sqrt{x}' },
+      { label: 'ⁿ√', latex: '\\sqrt[n]{x}' },
+      { label: 'x²', latex: 'x^{2}' },
+      { label: 'xₙ', latex: 'x_{n}' },
+      { label: 'Σ', latex: '\\sum_{i=1}^{n}' },
+      { label: '∏', latex: '\\prod_{i=1}^{n}' },
+      { label: '∫', latex: '\\int_{a}^{b}' },
+      { label: '∬', latex: '\\iint' },
+      { label: 'lim', latex: '\\lim_{x \\to \\infty}' },
+      { label: '()', latex: '\\left( \\right)' },
+      { label: '[]', latex: '\\left[ \\right]' },
+      { label: '{}', latex: '\\left\\{ \\right\\}' },
+      { label: '||', latex: '\\left| \\right|' },
     ],
   },
   {
     name: t('latex.common'),
+    layout: 'rendered',
     symbols: [
-      { label: 'E=mc²', latex: 'E = mc^2', display: t('latex.sym.massEnergy') },
-      { label: 'a²+b²=c²', latex: 'a^2 + b^2 = c^2', display: t('latex.sym.pythagorean') },
-      { label: t('latex.sym.quadraticLabel'), latex: 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}', display: t('latex.sym.quadratic') },
-      { label: t('latex.sym.matrixLabel'), latex: '\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', display: t('latex.sym.matrix') },
-      { label: t('latex.sym.determinantLabel'), latex: '\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}', display: t('latex.sym.determinant') },
-      { label: t('latex.sym.piecewiseLabel'), latex: 'f(x) = \\begin{cases} x & x \\geq 0 \\\\ -x & x < 0 \\end{cases}', display: t('latex.sym.piecewise') },
+      { label: 'E=mc²', latex: 'E = mc^2' },
+      { label: 'a²+b²=c²', latex: 'a^2 + b^2 = c^2' },
+      { label: 'x=?', latex: 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}' },
+      { label: '[a b; c d]', latex: '\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}' },
+      { label: '|a b; c d|', latex: '\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}' },
+      { label: 'f(x)={', latex: 'f(x) = \\begin{cases} x & x \\geq 0 \\\\ -x & x < 0 \\end{cases}' },
     ],
   },
 ];
@@ -122,6 +129,26 @@ export function LatexPanel({ onInsert }: LatexPanelProps) {
   const [open, setOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Pre-render KaTeX HTML for rendered categories
+  const renderedLatex = useMemo(() => {
+    const cache: Record<string, string> = {};
+    for (const cat of LATEX_CATEGORIES) {
+      if (cat.layout === 'rendered' || cat.layout === 'rendered-grid') {
+        for (const sym of cat.symbols) {
+          try {
+            cache[sym.latex] = katex.renderToString(sym.latex, {
+              throwOnError: false,
+              displayMode: false,
+            });
+          } catch {
+            cache[sym.latex] = sym.latex;
+          }
+        }
+      }
+    }
+    return cache;
+  }, []);
 
   // Close on click outside
   useEffect(() => {
@@ -173,17 +200,17 @@ export function LatexPanel({ onInsert }: LatexPanelProps) {
       </button>
 
       {open && (
-        <div className="absolute bottom-full left-0 mb-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 flex flex-col max-h-[22rem]">
-          {/* Category tabs */}
-          <div className="flex border-b border-gray-100 shrink-0 overflow-x-auto">
+        <div className="absolute bottom-full left-0 mb-1 w-96 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-50 flex max-h-[24rem]">
+          {/* Category tabs - vertical left sidebar */}
+          <div className="flex flex-col border-r border-gray-100 dark:border-gray-700 shrink-0 py-1">
             {LATEX_CATEGORIES.map((cat, i) => (
               <button
                 key={cat.name}
                 onClick={() => setActiveCategory(i)}
-                className={`px-2.5 py-1.5 text-xs font-medium whitespace-nowrap transition-colors ${
+                className={`px-2.5 py-2 text-xs font-medium whitespace-nowrap transition-colors text-left ${
                   activeCategory === i
-                    ? 'text-blue-600 border-b-2 border-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20 border-r-2 border-blue-600'
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >
                 {cat.name}
@@ -191,40 +218,70 @@ export function LatexPanel({ onInsert }: LatexPanelProps) {
             ))}
           </div>
 
-          {/* Symbols grid */}
+          {/* Right content area */}
+          <div className="flex flex-col flex-1 min-w-0">
+
+          {/* Symbols */}
           <div className="p-2 overflow-y-auto flex-1">
-            <div className="grid grid-cols-6 gap-1">
-              {currentCategory.symbols.map((sym) => (
-                <button
-                  key={sym.latex}
-                  onClick={() => {
-                    onInsert(sym.latex);
-                  }}
-                  className="flex flex-col items-center justify-center p-1.5 rounded hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-200 group"
-                  title={`${sym.display || sym.latex}`}
-                >
-                  <span className="text-base leading-none">{sym.label}</span>
-                  {sym.display && (
-                    <span className="text-[9px] text-gray-400 mt-0.5 group-hover:text-blue-500 truncate max-w-full">
-                      {sym.display}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+            {currentCategory.layout === 'rendered' ? (
+              <div className="grid grid-cols-2 gap-1">
+                {currentCategory.symbols.map((sym) => (
+                  <button
+                    key={sym.latex}
+                    onClick={() => { onInsert(sym.latex); }}
+                    className="flex items-center px-2 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors text-left border border-transparent hover:border-blue-200 dark:hover:border-blue-700"
+                    title={sym.latex}
+                  >
+                    <span
+                      dangerouslySetInnerHTML={{ __html: renderedLatex[sym.latex] || sym.latex }}
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : currentCategory.layout === 'rendered-grid' ? (
+              <div className="grid grid-cols-4 gap-1">
+                {currentCategory.symbols.map((sym) => (
+                  <button
+                    key={sym.latex}
+                    onClick={() => { onInsert(sym.latex); }}
+                    className="flex items-center justify-center p-2 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors border border-transparent hover:border-blue-200 dark:hover:border-blue-700"
+                    title={sym.latex}
+                  >
+                    <span
+                      className="text-sm"
+                      dangerouslySetInnerHTML={{ __html: renderedLatex[sym.latex] || sym.latex }}
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-6 gap-1">
+                {currentCategory.symbols.map((sym) => (
+                  <button
+                    key={sym.latex}
+                    onClick={() => { onInsert(sym.latex); }}
+                    className="flex flex-col items-center justify-center p-1.5 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors border border-transparent hover:border-blue-200 dark:hover:border-blue-700 group"
+                    title={sym.latex}
+                  >
+                    <span className="text-base leading-none">{sym.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Insert block formula button */}
-          <div className="border-t border-gray-100 p-2 shrink-0">
+          <div className="border-t border-gray-100 dark:border-gray-700 p-2 shrink-0">
             <button
               onClick={() => {
                 onInsert('', true);
                 setOpen(false);
               }}
-              className="w-full text-xs text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded py-1.5 transition-colors"
+              className="w-full text-xs text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded py-1.5 transition-colors"
             >
               {t('latex.insertBlock')} ($$...$$)
             </button>
+          </div>
           </div>
         </div>
       )}
