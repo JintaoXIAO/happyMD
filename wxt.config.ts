@@ -14,7 +14,6 @@ export default defineConfig({
   manifest: {
     name: 'HappyNote',
     description: 'A minimal Typora-like Markdown editor in your browser',
-    version: '0.1.0',
     action: {
       default_title: 'Open HappyNote',
     },
