@@ -20,6 +20,7 @@ interface EditorProps {
 export interface EditorHandle {
   insertTable: (row: number, col: number) => void;
   insertLatex: (latex: string, block?: boolean) => void;
+  insertMarkdown: (md: string) => void;
   getHeadings: () => TocItem[];
   scrollToPos: (pos: number) => void;
 }
@@ -53,6 +54,11 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, not
     insertTable(row: number, col: number) {
       if (crepeRef.current) {
         crepeRef.current.editor.action(callCommand(insertTableCommand.key, { row, col }));
+      }
+    },
+    insertMarkdown(md: string) {
+      if (crepeRef.current) {
+        crepeRef.current.editor.action(insert(md, false));
       }
     },
     insertLatex(latex: string, block = false) {
@@ -101,7 +107,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(({ defaultValue, not
         [CrepeFeature.ImageBlock]: true,
         [CrepeFeature.Cursor]: true,
         [CrepeFeature.Placeholder]: true,
-        [CrepeFeature.BlockEdit]: false,
+        [CrepeFeature.BlockEdit]: true,
         [CrepeFeature.Toolbar]: false,
         [CrepeFeature.Table]: true,
         [CrepeFeature.Latex]: true,

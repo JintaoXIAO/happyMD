@@ -5,6 +5,8 @@
   "app.unsaved": "",
   "app.saveError": "✗ Save failed",
 
+  "status.chars": "chars",
+
   "note.untitled": "Untitled Note",
   "note.new": "New Note",
   "note.search": "Search Notes",
@@ -39,7 +41,8 @@
   "confirm.clearAll.confirm": "Clear All",
   "confirm.clearAll.cancel": "Cancel",
 
-  "palette.placeholder": "Search notes... Type #tag to search tags",
+  "palette.placeholder": "Search notes...",
+  "palette.searchPlaceholder": "Search notes...",
   "palette.newNote": "+ New",
   "palette.noMatch": "No matching notes found",
   "palette.empty": "No notes yet",
@@ -133,5 +136,28 @@
   "latex.sym.quadraticLabel": "Roots",
   "latex.sym.matrixLabel": "Matrix",
   "latex.sym.determinantLabel": "Det",
-  "latex.sym.piecewiseLabel": "Piecewise"
+  "latex.sym.piecewiseLabel": "Piecewise",
+
+  "cmd.newNote": "New Note",
+  "cmd.copyMarkdown": "Copy Markdown",
+  "cmd.copyRichText": "Copy as Rich Text",
+  "cmd.settings": "Open Settings",
+  "cmd.darkMode": "Toggle Dark Mode",
+  "cmd.exportZip": "Export Current Note (Zip)",
+  "cmd.exportAll": "Export All Notes (Zip)",
+  "cmd.exportPDF": "Export as PDF",
+  "cmd.table": "Insert Table",
+  "cmd.latex": "Insert Formula",
+  "cmd.code": "Insert Code Block",
+  "cmd.heading1": "Heading 1",
+  "cmd.heading2": "Heading 2",
+  "cmd.heading3": "Heading 3",
+  "cmd.bulletList": "Bullet List",
+  "cmd.orderedList": "Ordered List",
+  "cmd.quote": "Blockquote",
+  "cmd.hr": "Horizontal Rule",
+  "cmd.image": "Insert Image",
+
+  "palette.hintCommands": "Type > for commands",
+  "palette.hintSlash": "Type / to insert"
 }

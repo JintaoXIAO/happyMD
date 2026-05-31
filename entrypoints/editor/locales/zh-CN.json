@@ -5,6 +5,8 @@
   "app.unsaved": "",
   "app.saveError": "✗ 保存失败",
 
+  "status.chars": "字",
+
   "note.untitled": "无标题笔记",
   "note.new": "新建笔记",
   "note.search": "搜索笔记",
@@ -39,7 +41,8 @@
   "confirm.clearAll.confirm": "全部清空",
   "confirm.clearAll.cancel": "取消",
 
-  "palette.placeholder": "搜索笔记... 输入 #tag 搜索标签",
+  "palette.placeholder": "搜索笔记...",
+  "palette.searchPlaceholder": "搜索笔记...",
   "palette.newNote": "+ 新建",
   "palette.noMatch": "没有找到匹配的笔记",
   "palette.empty": "暂无笔记",
@@ -133,5 +136,28 @@
   "latex.sym.quadraticLabel": "求根",
   "latex.sym.matrixLabel": "矩阵",
   "latex.sym.determinantLabel": "行列式",
-  "latex.sym.piecewiseLabel": "分段"
+  "latex.sym.piecewiseLabel": "分段",
+
+  "cmd.newNote": "新建笔记",
+  "cmd.copyMarkdown": "复制 Markdown",
+  "cmd.copyRichText": "复制为富文本",
+  "cmd.settings": "打开设置",
+  "cmd.darkMode": "切换暗色模式",
+  "cmd.exportZip": "导出当前笔记 (Zip)",
+  "cmd.exportAll": "导出所有笔记 (Zip)",
+  "cmd.exportPDF": "导出为 PDF",
+  "cmd.table": "插入表格",
+  "cmd.latex": "插入公式",
+  "cmd.code": "插入代码块",
+  "cmd.heading1": "一级标题",
+  "cmd.heading2": "二级标题",
+  "cmd.heading3": "三级标题",
+  "cmd.bulletList": "无序列表",
+  "cmd.orderedList": "有序列表",
+  "cmd.quote": "引用块",
+  "cmd.hr": "分隔线",
+  "cmd.image": "插入图片",
+
+  "palette.hintCommands": "输入 > 执行命令",
+  "palette.hintSlash": "输入 / 插入格式"
 }

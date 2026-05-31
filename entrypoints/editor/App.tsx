@@ -14,15 +14,12 @@ import {
   DEFAULT_SETTINGS,
 } from './db';
 import type { NoteRecord, Settings } from './db';
-import { SettingsPanel } from './SettingsPanel';
-import { TableInsertButton } from './TableInsertButton';
-import { LatexPanel } from './LatexPanel';
 import { CommandPalette } from './CommandPalette';
 import { TableOfContents, type TocItem } from './TableOfContents';
 import { ShortcutsPanel } from './ShortcutsPanel';
-import { ExportMenu } from './ExportMenu';
-import { CopyButton } from './CopyButton';
 import { ConfirmDialog } from './ConfirmDialog';
+import { exportNoteAsZip, exportAllAsZip, exportAsPDF } from './export';
+import { markdownToHtml } from './CopyButton';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
 
@@ -32,10 +29,10 @@ export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [tocVisible, setTocVisible] = useState(false);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [clearAllConfirm, setClearAllConfirm] = useState(false);
+  const [charCount, setCharCount] = useState(0);
 
   // Multi-document state
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -78,6 +75,7 @@ export default function App() {
         const content = note?.content ?? '';
         setInitialContent(content);
         latestContentRef.current = content;
+        setCharCount(content.trim().length);
       } catch (err) {
         console.error('Failed to init:', err);
         setInitialContent('# Welcome to HappyNote\n\nStart typing here...');
@@ -100,6 +98,7 @@ export default function App() {
   // Auto-save with debounce
   const handleChange = useCallback((markdown: string) => {
     latestContentRef.current = markdown;
+    setCharCount(markdown.trim().length);
     setSaveStatus('unsaved');
 
     if (saveTimeoutRef.current) {
@@ -144,6 +143,7 @@ export default function App() {
     setActiveNoteId(id);
     setInitialContent(note.content);
     latestContentRef.current = note.content;
+    setCharCount(note.content.trim().length);
     setSaveStatus('saved');
 
     // Refresh list for updated times
@@ -205,10 +205,10 @@ export default function App() {
         });
         return;
       }
-      // Ctrl+,: Toggle settings
+      // Ctrl+,: Open command palette (settings accessible there)
       if (e.ctrlKey && !e.shiftKey && e.key === ',') {
         e.preventDefault();
-        setSettingsOpen((v) => !v);
+        setPaletteOpen(true);
         return;
       }
       // Ctrl+?: Toggle shortcuts panel
@@ -230,6 +230,15 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleCreateNote]);
+
+  // Disable right-click context menu
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+    document.addEventListener('contextmenu', handleContextMenu);
+    return () => document.removeEventListener('contextmenu', handleContextMenu);
+  }, []);
 
   // Delete a note
   const handleDeleteNote = useCallback((id: string) => {
@@ -308,10 +317,36 @@ export default function App() {
         open={paletteOpen}
         notes={notes}
         activeNoteId={activeNoteId}
+        settings={settings}
         onSelectNote={handleSelectNote}
         onCreateNote={handleCreateNote}
         onDeleteNote={handleDeleteNote}
         onClose={() => setPaletteOpen(false)}
+        onSettingsChange={handleSettingsChange}
+        onCopyMarkdown={() => {
+          const md = latestContentRef.current;
+          if (md.trim()) navigator.clipboard.writeText(md);
+        }}
+        onCopyRichText={() => {
+          const md = latestContentRef.current;
+          if (md.trim()) {
+            const html = markdownToHtml(md);
+            navigator.clipboard.write([
+              new ClipboardItem({
+                'text/html': new Blob([html], { type: 'text/html' }),
+                'text/plain': new Blob([md], { type: 'text/plain' }),
+              }),
+            ]);
+          }
+        }}
+        onToggleDarkMode={() => {
+          const newSettings = { ...settings, darkMode: !settings.darkMode };
+          setSettings(newSettings);
+          saveSettings(newSettings);
+        }}
+        onExportZip={() => { if (activeNoteId) exportNoteAsZip(activeNoteId); }}
+        onExportAll={() => exportAllAsZip()}
+        onExportPDF={() => exportAsPDF()}
       />
 
       {/* Shortcuts Panel */}
@@ -374,83 +409,12 @@ export default function App() {
         onClose={() => setTocVisible(false)}
       />
 
-      {/* Bottom toolbar + status bar */}
-      <div className="flex justify-between items-center px-4 py-1.5 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-400 shrink-0 bg-white dark:bg-[#1a1a1a] relative z-10">
-        {/* Left: tools */}
-        <div className="flex items-center gap-1">
-          {/* New note */}
-          <button
-            onClick={() => { handleCreateNote(); }}
-            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
-            title={t('toolbar.newNote')}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-          </button>
-          {/* Search / Command Palette toggle */}
-          <button
-            onClick={() => setPaletteOpen((v) => !v)}
-            className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
-            title={t('toolbar.search')}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-            </svg>
-          </button>
-          <TableInsertButton onInsert={(row, col) => editorHandleRef.current?.insertTable(row, col)} />
-          <LatexPanel onInsert={(latex, block) => editorHandleRef.current?.insertLatex(latex, block)} />
-          <CopyButton getMarkdown={() => latestContentRef.current} />
-          <SettingsPanel settings={settings} onSettingsChange={handleSettingsChange} open={settingsOpen} onOpenChange={setSettingsOpen} />
-        </div>
-
-        {/* Right: manage + dark mode + TOC + status */}
-        <div className="flex items-center gap-2">
-          <ExportMenu noteId={activeNoteId} noteEmpty={!latestContentRef.current.trim()} onClearAll={handleClearAll} />
-          {/* Dark mode toggle */}
-          <button
-            onClick={() => {
-              const newSettings = { ...settings, darkMode: !settings.darkMode };
-              setSettings(newSettings);
-              saveSettings(newSettings);
-            }}
-            className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 dark:hover:bg-gray-700"
-            title={settings.darkMode ? t('toolbar.lightMode') : t('toolbar.darkMode')}
-          >
-            {settings.darkMode ? (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-              </svg>
-            )}
-          </button>
-          {/* TOC toggle */}
-          <button
-            onClick={() => setTocVisible((v) => !v)}
-            className={`p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${tocVisible ? 'text-gray-600' : 'text-gray-400'} hover:text-gray-600`}
-            title={t('toolbar.toc')}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12M8.25 17.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-            </svg>
-          </button>
-          <span className="transition-opacity duration-300">
-            {statusText[saveStatus]}
-          </span>
-          {/* Shortcuts help */}
-          <button
-            onClick={() => setShortcutsOpen((v) => !v)}
-            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600"
-            title={t('toolbar.shortcuts')}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-            </svg>
-          </button>
-        </div>
+      {/* Bottom status bar */}
+      <div className="flex justify-between items-center px-4 py-1 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-400 shrink-0 bg-white dark:bg-[#1a1a1a] relative z-10">
+        <span>{charCount > 0 ? `${charCount} ${t('status.chars')}` : ''}</span>
+        <span className="transition-opacity duration-300">
+          {statusText[saveStatus]}
+        </span>
       </div>
     </div>
   );

@@ -7,9 +7,8 @@ interface CopyButtonProps {
 
 /**
  * Convert markdown to basic HTML for rich text clipboard.
- * Uses a simple approach: render markdown via the editor's DOM.
  */
-function markdownToHtml(markdown: string): string {
+export function markdownToHtml(markdown: string): string {
   // Simple markdown to HTML conversion for clipboard
   let html = markdown;
 
