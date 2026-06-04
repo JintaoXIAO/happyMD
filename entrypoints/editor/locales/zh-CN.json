@@ -159,5 +159,9 @@
   "cmd.image": "插入图片",
 
   "palette.hintCommands": "输入 > 执行命令",
-  "palette.hintSlash": "输入 / 插入格式"
+  "palette.hintSlash": "输入 / 插入格式",
+
+  "contextMenu.copyMarkdown": "复制 Markdown",
+  "contextMenu.copyRichText": "复制为富文本",
+  "contextMenu.paste": "粘贴"
 }

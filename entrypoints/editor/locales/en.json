@@ -159,5 +159,9 @@
   "cmd.image": "Insert Image",
 
   "palette.hintCommands": "Type > for commands",
-  "palette.hintSlash": "Type / to insert"
+  "palette.hintSlash": "Type / to insert",
+
+  "contextMenu.copyMarkdown": "Copy Markdown",
+  "contextMenu.copyRichText": "Copy as Rich Text",
+  "contextMenu.paste": "Paste"
 }

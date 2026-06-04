@@ -1,5 +1,10 @@
 import { defineConfig } from 'wxt';
 import tailwindcss from '@tailwindcss/vite';
+import { platform } from 'os';
+
+const heliumBinary = platform() === 'darwin'
+  ? '/Applications/Helium.app/Contents/MacOS/Helium'
+  : 'C:\\Users\\xiaoj\\AppData\\Local\\imput\\Helium\\Application\\chrome.exe';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -8,7 +13,7 @@ export default defineConfig({
   runner: {
     chromiumArgs: [],
     binaries: {
-      chrome: 'C:\\Users\\xiaoj\\AppData\\Local\\imput\\Helium\\Application\\chrome.exe',
+      chrome: heliumBinary,
     },
   },
   manifest: {

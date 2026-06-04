@@ -20,6 +20,7 @@ import { ShortcutsPanel } from './ShortcutsPanel';
 import { ConfirmDialog } from './ConfirmDialog';
 import { exportNoteAsZip, exportAllAsZip, exportAsPDF } from './export';
 import { markdownToHtml } from './CopyButton';
+import { ContextMenu } from './ContextMenu';
 
 type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';
 
@@ -33,6 +34,7 @@ export default function App() {
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [clearAllConfirm, setClearAllConfirm] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
   // Multi-document state
   const [notes, setNotes] = useState<NoteRecord[]>([]);
@@ -231,10 +233,12 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleCreateNote]);
 
-  // Disable right-click context menu
+  // Custom right-click context menu
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
+      // Always update position (closes and reopens if already shown)
+      setContextMenu({ x: e.clientX, y: e.clientY });
     };
     document.addEventListener('contextmenu', handleContextMenu);
     return () => document.removeEventListener('contextmenu', handleContextMenu);
@@ -291,6 +295,18 @@ export default function App() {
     saveSettings(newSettings).catch((err) => {
       console.error('Failed to save settings:', err);
     });
+  }, []);
+
+  // Paste from clipboard into editor
+  const handlePaste = useCallback(async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text && editorHandleRef.current) {
+        editorHandleRef.current.insertMarkdown(text);
+      }
+    } catch (err) {
+      console.error('Failed to paste:', err);
+    }
   }, []);
 
   const statusText: Record<SaveStatus, string> = {
@@ -375,6 +391,17 @@ export default function App() {
         onConfirm={confirmClearAll}
         onCancel={() => setClearAllConfirm(false)}
       />
+
+      {/* Custom Context Menu */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+          getMarkdown={() => latestContentRef.current}
+          onPaste={handlePaste}
+        />
+      )}
 
       {/* Editor area + TOC */}
       <div className="flex-1 overflow-hidden flex">
