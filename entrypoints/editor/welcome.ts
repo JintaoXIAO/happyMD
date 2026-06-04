@@ -1,54 +1,54 @@
-export const WELCOME_CONTENT = `# 欢迎使用 HappyNote 🎉
+export const WELCOME_CONTENT = `# Welcome to HappyNote 🎉
 
-HappyNote 是一款轻量、优雅的浏览器 Markdown 编辑器，提供类似 Typora 的所见即所得体验。所有数据保存在本地浏览器中，无需登录、无需联网。
+HappyNote is a lightweight, elegant Markdown editor that lives in your browser. It offers a Typora-like WYSIWYG experience — all your data is stored locally with no login or internet required.
 
 ---
 
-## 快速开始
+## Getting Started
 
-直接在此处输入即可开始写作。HappyNote 支持标准 Markdown 语法，输入后会立即渲染为富文本格式。
+Just start typing here. HappyNote supports standard Markdown syntax and renders it as rich text in real time.
 
-### 基础格式
+### Basic Formatting
 
-| 语法 | 效果 |
-|------|------|
-| \`**粗体**\` | **粗体** |
-| \`*斜体*\` | *斜体* |
-| \`~~删除线~~\` | ~~删除线~~ |
-| \`\\\`行内代码\\\`\` | \`行内代码\` |
-| \`[链接](url)\` | [链接](https://example.com) |
+| Syntax | Result |
+|--------|--------|
+| \`**bold**\` | **bold** |
+| \`*italic*\` | *italic* |
+| \`~~strikethrough~~\` | ~~strikethrough~~ |
+| \`\\\`inline code\\\`\` | \`inline code\` |
+| \`[link](url)\` | [link](https://example.com) |
 
-### 标题
+### Headings
 
-使用 \`#\` 号创建标题，支持 1-6 级：
+Use \`#\` to create headings (levels 1–6):
 
 \`\`\`
-# 一级标题
-## 二级标题
-### 三级标题
+# Heading 1
+## Heading 2
+### Heading 3
 \`\`\`
 
-### 列表
+### Lists
 
-无序列表使用 \`-\` 或 \`*\`：
+Unordered lists use \`-\` or \`*\`:
 
-- 第一项
-- 第二项
-  - 嵌套项
+- First item
+- Second item
+  - Nested item
 
-有序列表使用数字：
+Ordered lists use numbers:
 
-1. 第一步
-2. 第二步
-3. 第三步
+1. Step one
+2. Step two
+3. Step three
 
-### 引用
+### Blockquotes
 
-> 使用 \`>\` 创建引用块，适合标注重要信息。
+> Use \`>\` to create a blockquote — great for highlighting important notes.
 
-### 代码块
+### Code Blocks
 
-使用三个反引号创建代码块，支持语法高亮：
+Use triple backticks for code blocks with syntax highlighting:
 
 \`\`\`javascript
 function hello() {
@@ -56,77 +56,77 @@ function hello() {
 }
 \`\`\`
 
-代码块支持**折叠/展开**，长代码块右上角有折叠按钮。
+Code blocks support **collapse/expand** — look for the toggle button on long blocks.
 
-### 分隔线
+### Horizontal Rule
 
-使用 \`---\` 创建分隔线。
-
----
-
-## 快捷键
-
-HappyNote 提供丰富的快捷键加速你的写作：
-
-| 快捷键 | 功能 |
-|--------|------|
-| \`Ctrl+N\` | 新建笔记 |
-| \`Ctrl+P\` | 搜索 / 切换笔记 |
-| \`Ctrl+L\` | 打开/关闭目录大纲 |
-| \`Ctrl+D\` | 切换暗色模式 |
-| \`Ctrl+,\` | 打开设置 |
-| \`Ctrl+?\` | 查看快捷键帮助 |
-| \`Ctrl+B\` | 粗体 |
-| \`Ctrl+I\` | 斜体 |
-| \`Ctrl+Z\` | 撤销 |
-| \`Ctrl+Shift+Z\` | 重做 |
-| \`Ctrl+Shift+C\` | 复制为 Markdown |
+Use \`---\` to insert a divider.
 
 ---
 
-## 命令面板
+## Keyboard Shortcuts
 
-按 \`Ctrl+P\` 打开命令面板，可以：
+HappyNote provides keyboard shortcuts to speed up your writing:
 
-- **搜索笔记**：输入关键词快速查找并切换笔记
-- **执行命令**：输入 \`>\` 进入命令模式，可执行插入格式、导出等操作
-- **插入格式**：输入 \`/\` 快速插入标题、列表、代码块、引用等
-
-命令面板底部的图标栏提供一键快捷操作。
+| Shortcut | Action |
+|----------|--------|
+| \`Ctrl+N\` | New note |
+| \`Ctrl+P\` | Search / switch notes |
+| \`Ctrl+L\` | Toggle table of contents |
+| \`Ctrl+D\` | Toggle dark mode |
+| \`Ctrl+,\` | Open settings |
+| \`Ctrl+?\` | Show shortcut help |
+| \`Ctrl+B\` | Bold |
+| \`Ctrl+I\` | Italic |
+| \`Ctrl+Z\` | Undo |
+| \`Ctrl+Shift+Z\` | Redo |
+| \`Ctrl+Shift+C\` | Copy as Markdown |
 
 ---
 
-## 多文档管理
+## Command Palette
 
-- 按 \`Ctrl+N\` 新建笔记
-- 按 \`Ctrl+P\` 搜索和切换笔记
-- 笔记自动保存，切换时无需手动保存
-- 在命令面板中悬浮笔记可见删除按钮
+Press \`Ctrl+P\` to open the command palette:
+
+- **Search notes**: Type keywords to quickly find and switch between notes
+- **Run commands**: Type \`>\` to enter command mode for formatting, exporting, etc.
+- **Insert formats**: Type \`/\` to quickly insert headings, lists, code blocks, quotes, and more
+
+The icon bar at the bottom provides one-click quick actions.
 
 ---
 
-## 插入表格
+## Multi-Document Management
 
-通过命令面板输入 \`>\` 后选择「插入表格」，或使用 Markdown 语法：
+- Press \`Ctrl+N\` to create a new note
+- Press \`Ctrl+P\` to search and switch between notes
+- Notes are auto-saved — no need to save manually when switching
+- Hover over a note in the command palette to reveal the delete button
+
+---
+
+## Tables
+
+Insert tables via the command palette (type \`>\` then select "Insert Table"), or use Markdown syntax:
 
 \`\`\`
-| 列1 | 列2 | 列3 |
-|-----|-----|-----|
-| A   | B   | C   |
+| Col 1 | Col 2 | Col 3 |
+|-------|-------|-------|
+| A     | B     | C     |
 \`\`\`
 
 ---
 
-## 数学公式
+## Math Formulas
 
-HappyNote 支持 LaTeX 数学公式。通过命令面板插入公式，内置常用公式模板：
+HappyNote supports LaTeX math expressions. Insert formulas via the command palette with built-in templates:
 
-- 希腊字母：$\\alpha$, $\\beta$, $\\gamma$
-- 分数：$\\frac{a}{b}$
-- 求和：$\\sum_{i=1}^{n} x_i$
-- 积分：$\\int_0^\\infty e^{-x} dx$
+- Greek letters: $\\alpha$, $\\beta$, $\\gamma$
+- Fractions: $\\frac{a}{b}$
+- Summation: $\\sum_{i=1}^{n} x_i$
+- Integrals: $\\int_0^\\infty e^{-x} dx$
 
-块级公式：
+Block-level formula:
 
 $$
 E = mc^2
@@ -134,59 +134,59 @@ $$
 
 ---
 
-## 图片支持
+## Images
 
-直接从剪贴板粘贴图片即可插入，图片将保存在浏览器本地存储中，无需额外图床。
-
----
-
-## 目录大纲
-
-按 \`Ctrl+L\` 打开右侧目录面板，自动提取文档中的标题结构，点击可快速跳转到对应位置。
+Paste images directly from your clipboard — they'll be stored in local browser storage with no external hosting needed.
 
 ---
 
-## 导出功能
+## Table of Contents
 
-HappyNote 支持多种导出方式：
-
-- **导出为 ZIP**：将当前笔记导出为包含 Markdown 文件和图片的 ZIP 包
-- **导出为 PDF**：直接将当前笔记打印/导出为 PDF
-- **导出全部**：将所有笔记打包导出为 ZIP
-
-通过命令面板底部的导出按钮或 \`>\` 命令模式触发。
+Press \`Ctrl+L\` to open the outline panel on the right. It automatically extracts the heading structure from your document. Click any heading to jump to that section.
 
 ---
 
-## 个性化设置
+## Export
 
-按 \`Ctrl+,\` 打开设置面板：
+HappyNote supports multiple export options:
 
-- **正文字体**：选择系统已安装的任意字体
-- **代码字体**：为代码块单独设置等宽字体
-- **字号调整**：支持 12-24px 字号滑动调节
-- **暗色模式**：按 \`Ctrl+D\` 一键切换
+- **Export as ZIP**: Package the current note (Markdown + images) as a ZIP file
+- **Export as PDF**: Print or save the current note as a PDF
+- **Export all**: Package all notes into a single ZIP file
 
----
-
-## 右键菜单
-
-在编辑器中右键可快速：
-
-- 复制 Markdown 源码
-- 复制为富文本（粘贴到微信、邮件等应用保留格式）
-- 粘贴剪贴板内容
+Access these via the command palette icons or \`>\` command mode.
 
 ---
 
-## 小贴士
+## Customization
 
-1. 所有笔记自动保存在浏览器本地，关闭标签页也不会丢失
-2. 按 \`Alt+N\` 可从任何页面快速打开 HappyNote
-3. 底部状态栏显示字数统计和保存状态
-4. 建议定期使用「导出全部」备份你的笔记
+Press \`Ctrl+,\` to open the settings panel:
+
+- **Text font**: Choose from any system-installed font
+- **Code font**: Set a separate monospace font for code blocks
+- **Font size**: Adjust between 12–24px with a slider
+- **Dark mode**: Toggle with \`Ctrl+D\`
 
 ---
 
-开始你的写作之旅吧！你可以删除这篇文档，或将它保留作为参考。按 \`Ctrl+N\` 新建一篇属于你的笔记。
+## Context Menu
+
+Right-click anywhere in the editor to quickly:
+
+- Copy as Markdown source
+- Copy as rich text (paste into emails, docs, etc. with formatting preserved)
+- Paste from clipboard
+
+---
+
+## Tips
+
+1. All notes are auto-saved locally in your browser — closing the tab won't lose your work
+2. Press \`Alt+N\` from any page to quickly open HappyNote
+3. The status bar at the bottom shows character count and save status
+4. Periodically use "Export All" to back up your notes
+
+---
+
+Happy writing! Feel free to delete this document or keep it as a reference. Press \`Ctrl+N\` to create your first note.
 `;
