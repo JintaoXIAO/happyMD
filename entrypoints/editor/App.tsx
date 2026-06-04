@@ -14,6 +14,7 @@ import {
   DEFAULT_SETTINGS,
 } from './db';
 import type { NoteRecord, Settings } from './db';
+import { WELCOME_CONTENT } from './welcome';
 import { CommandPalette } from './CommandPalette';
 import { TableOfContents, type TocItem } from './TableOfContents';
 import { ShortcutsPanel } from './ShortcutsPanel';
@@ -61,9 +62,9 @@ export default function App() {
         const migratedId = await migrateIfNeeded();
         let noteList = await listNotes();
 
-        // If no notes exist, create a welcome note
+        // If no notes exist, create a welcome note with help content
         if (noteList.length === 0) {
-          const welcome = await createNote('# Welcome to HappyNote\n\nStart typing here...');
+          const welcome = await createNote(WELCOME_CONTENT);
           noteList = [welcome];
         }
 
@@ -80,7 +81,7 @@ export default function App() {
         setCharCount(content.trim().length);
       } catch (err) {
         console.error('Failed to init:', err);
-        setInitialContent('# Welcome to HappyNote\n\nStart typing here...');
+        setInitialContent(WELCOME_CONTENT);
       }
     }
     init();
