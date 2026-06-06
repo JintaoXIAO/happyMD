@@ -1,4 +1,5 @@
 import { openDB, type IDBPDatabase } from 'idb';
+import { t } from './i18n';
 
 export interface NoteRecord {
   id: string;
@@ -99,7 +100,7 @@ export function extractTitle(content: string): string {
   if (match) return match[1].trim();
   const firstLine = content.trim().split('\n')[0]?.trim();
   if (firstLine) return firstLine.slice(0, 50);
-  return '无标题笔记';
+  return t('note.untitled');
 }
 
 export async function createNote(content = ''): Promise<NoteRecord> {
@@ -107,7 +108,7 @@ export async function createNote(content = ''): Promise<NoteRecord> {
   const now = Date.now();
   const note: NoteRecord = {
     id: generateId(),
-    title: extractTitle(content) || '无标题笔记',
+    title: extractTitle(content) || t('note.untitled'),
     content,
     createdAt: now,
     updatedAt: now,
