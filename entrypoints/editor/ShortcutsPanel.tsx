@@ -7,18 +7,14 @@ interface ShortcutsPanelProps {
 
 function getShortcuts() {
   return [
-    { key: 'Ctrl+N', desc: t('shortcuts.newNote') },
-    { key: 'Ctrl+P', desc: t('shortcuts.search') },
-    { key: 'Ctrl+L', desc: t('shortcuts.toc') },
-    { key: 'Ctrl+D', desc: t('shortcuts.darkMode') },
-    { key: 'Ctrl+,', desc: t('shortcuts.fontSettings') },
-    { key: 'Ctrl+?', desc: t('shortcuts.help') },
+    { key: 'Alt+N', desc: t('shortcuts.newNote') },
+    { key: 'Alt+P', desc: t('shortcuts.search') },
+    { key: 'Alt+L', desc: t('shortcuts.toc') },
     { key: '', desc: '' },
     { key: 'Ctrl+B', desc: t('shortcuts.bold') },
     { key: 'Ctrl+I', desc: t('shortcuts.italic') },
     { key: 'Ctrl+Z', desc: t('shortcuts.undo') },
     { key: 'Ctrl+Shift+Z', desc: t('shortcuts.redo') },
-    { key: 'Ctrl+Shift+C', desc: t('shortcuts.copy') },
   ];
 }
 

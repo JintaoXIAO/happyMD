@@ -15,15 +15,15 @@
 
   "editor.placeholder": "Start writing...",
 
-  "toolbar.newNote": "New Note (Ctrl+N)",
-  "toolbar.search": "Search Notes (Ctrl+P)",
+  "toolbar.newNote": "New Note (Alt+N)",
+  "toolbar.search": "Search Notes (Alt+P)",
   "toolbar.fontSettings": "Font Settings",
   "toolbar.insertTable": "Insert Table",
   "toolbar.insertLatex": "Insert Formula",
   "toolbar.manage": "Manage",
-  "toolbar.darkMode": "Toggle Dark Mode (Ctrl+D)",
-  "toolbar.lightMode": "Toggle Light Mode (Ctrl+D)",
-  "toolbar.toc": "Outline (Ctrl+L)",
+  "toolbar.darkMode": "Toggle Dark Mode",
+  "toolbar.lightMode": "Toggle Light Mode",
+  "toolbar.toc": "Outline (Alt+L)",
   "toolbar.shortcuts": "Keyboard Shortcuts (Ctrl+?)",
 
   "export.currentZip": "Export Current Note (.zip)",

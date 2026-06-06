@@ -177,57 +177,24 @@ export default function App() {
     setSaveStatus('saved');
   }, []);
 
-  // Global keyboard shortcuts
+  // Global keyboard shortcuts (Alt+key to avoid browser conflicts)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ctrl+N: New note
-      if (e.ctrlKey && !e.shiftKey && e.key === 'n') {
-        e.preventDefault();
-        handleCreateNote();
-        return;
-      }
-      // Ctrl+P: Search / Command Palette
-      if (e.ctrlKey && !e.shiftKey && e.key === 'p') {
-        e.preventDefault();
-        setPaletteOpen((v) => !v);
-        return;
-      }
-      // Ctrl+L: Toggle TOC
-      if (e.ctrlKey && !e.shiftKey && e.key === 'l') {
-        e.preventDefault();
-        setTocVisible((v) => !v);
-        return;
-      }
-      // Ctrl+D: Toggle dark mode
-      if (e.ctrlKey && !e.shiftKey && e.key === 'd') {
-        e.preventDefault();
-        setSettings((prev) => {
-          const newSettings = { ...prev, darkMode: !prev.darkMode };
-          saveSettings(newSettings);
-          return newSettings;
-        });
-        return;
-      }
-      // Ctrl+,: Open command palette (settings accessible there)
-      if (e.ctrlKey && !e.shiftKey && e.key === ',') {
-        e.preventDefault();
-        setPaletteOpen(true);
-        return;
-      }
-      // Ctrl+?: Toggle shortcuts panel
-      if (e.ctrlKey && e.key === '?') {
-        e.preventDefault();
-        setShortcutsOpen((v) => !v);
-        return;
-      }
-      // Ctrl+Shift+C: Copy markdown
-      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        e.preventDefault();
-        const md = latestContentRef.current;
-        if (md.trim()) {
-          navigator.clipboard.writeText(md);
-        }
-        return;
+      if (!e.altKey || e.ctrlKey || e.shiftKey) return;
+
+      switch (e.key) {
+        case 'n': // Alt+N: New note
+          e.preventDefault();
+          handleCreateNote();
+          break;
+        case 'p': // Alt+P: Command Palette
+          e.preventDefault();
+          setPaletteOpen((v) => !v);
+          break;
+        case 'l': // Alt+L: Toggle TOC
+          e.preventDefault();
+          setTocVisible((v) => !v);
+          break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);

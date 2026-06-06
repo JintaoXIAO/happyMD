@@ -15,15 +15,15 @@
 
   "editor.placeholder": "开始写点什么...",
 
-  "toolbar.newNote": "新建笔记 (Ctrl+N)",
-  "toolbar.search": "搜索笔记 (Ctrl+P)",
+  "toolbar.newNote": "新建笔记 (Alt+N)",
+  "toolbar.search": "搜索笔记 (Alt+P)",
   "toolbar.fontSettings": "字体设置",
   "toolbar.insertTable": "插入表格",
   "toolbar.insertLatex": "插入公式",
   "toolbar.manage": "管理",
-  "toolbar.darkMode": "切换暗黑模式 (Ctrl+D)",
-  "toolbar.lightMode": "切换亮色模式 (Ctrl+D)",
-  "toolbar.toc": "大纲 (Ctrl+L)",
+  "toolbar.darkMode": "切换暗黑模式",
+  "toolbar.lightMode": "切换亮色模式",
+  "toolbar.toc": "大纲 (Alt+L)",
   "toolbar.shortcuts": "快捷键帮助 (Ctrl+?)",
 
   "export.currentZip": "导出当前笔记 (.zip)",
