@@ -426,6 +426,12 @@ export default function App() {
           {charCount > 0 && notes.length > 0 ? ' · ' : ''}
           {notes.length > 0 ? `${notes.length} ${t('status.notes')}` : ''}
         </span>
+        <button
+          onClick={() => setPaletteOpen(true)}
+          className="px-2 py-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+        >
+          Ctrl+Alt+P
+        </button>
         <span className="transition-opacity duration-300">
           {statusText[saveStatus]}
         </span>
