@@ -183,7 +183,7 @@ export default function App() {
       if (!e.altKey || e.ctrlKey || e.shiftKey) return;
 
       switch (e.key) {
-        case 'n': // Alt+N: New note
+        case 't': // Alt+T: New note
           e.preventDefault();
           handleCreateNote();
           break;

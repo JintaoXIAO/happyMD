@@ -15,7 +15,7 @@
 
   "editor.placeholder": "开始写点什么...",
 
-  "toolbar.newNote": "新建笔记 (Alt+N)",
+  "toolbar.newNote": "新建笔记 (Alt+T)",
   "toolbar.search": "搜索笔记 (Alt+P)",
   "toolbar.fontSettings": "字体设置",
   "toolbar.insertTable": "插入表格",

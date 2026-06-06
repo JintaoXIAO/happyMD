@@ -7,7 +7,7 @@ interface ShortcutsPanelProps {
 
 function getShortcuts() {
   return [
-    { key: 'Alt+N', desc: t('shortcuts.newNote') },
+    { key: 'Alt+T', desc: t('shortcuts.newNote') },
     { key: 'Alt+P', desc: t('shortcuts.search') },
     { key: 'Alt+L', desc: t('shortcuts.toc') },
     { key: '', desc: '' },

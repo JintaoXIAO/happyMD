@@ -70,7 +70,7 @@ HappyNote provides keyboard shortcuts to speed up your writing:
 
 | Shortcut | Action |
 |----------|--------|
-| \`Alt+N\` | New note |
+| \`Alt+T\` | New note |
 | \`Alt+P\` | Search / switch notes |
 | \`Alt+L\` | Toggle table of contents |
 | \`Ctrl+B\` | Bold |
@@ -94,7 +94,7 @@ The icon bar at the bottom provides one-click quick actions.
 
 ## Multi-Document Management
 
-- Press \`Alt+N\` to create a new note
+- Press \`Alt+T\` to create a new note
 - Press \`Alt+P\` to search and switch between notes
 - Notes are auto-saved — no need to save manually when switching
 - Hover over a note in the command palette to reveal the delete button
@@ -184,5 +184,5 @@ Right-click anywhere in the editor to quickly:
 
 ---
 
-Happy writing! Feel free to delete this document or keep it as a reference. Press \`Alt+N\` to create your first note.
+Happy writing! Feel free to delete this document or keep it as a reference. Press \`Alt+T\` to create your first note.
 `;

@@ -15,7 +15,7 @@
 
   "editor.placeholder": "Start writing...",
 
-  "toolbar.newNote": "New Note (Alt+N)",
+  "toolbar.newNote": "New Note (Alt+T)",
   "toolbar.search": "Search Notes (Alt+P)",
   "toolbar.fontSettings": "Font Settings",
   "toolbar.insertTable": "Insert Table",
