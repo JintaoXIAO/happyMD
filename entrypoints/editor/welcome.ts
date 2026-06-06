@@ -70,9 +70,10 @@ HappyNote provides keyboard shortcuts to speed up your writing:
 
 | Shortcut | Action |
 |----------|--------|
-| \`Alt+T\` | New note |
-| \`Alt+P\` | Search / switch notes |
-| \`Alt+L\` | Toggle table of contents |
+| \`Ctrl+Alt+N\` | New note |
+| \`Ctrl+Alt+P\` | Search / switch notes |
+| \`Ctrl+L\` | Toggle table of contents |
+| \`Ctrl+D\` | Toggle dark mode |
 | \`Ctrl+B\` | Bold |
 | \`Ctrl+I\` | Italic |
 | \`Ctrl+Z\` | Undo |
@@ -82,7 +83,7 @@ HappyNote provides keyboard shortcuts to speed up your writing:
 
 ## Command Palette
 
-Press \`Alt+P\` to open the command palette:
+Press \`Ctrl+Alt+P\` to open the command palette:
 
 - **Search notes**: Type keywords to quickly find and switch between notes
 - **Run commands**: Type \`>\` to enter command mode for formatting, exporting, etc.
@@ -94,8 +95,8 @@ The icon bar at the bottom provides one-click quick actions.
 
 ## Multi-Document Management
 
-- Press \`Alt+T\` to create a new note
-- Press \`Alt+P\` to search and switch between notes
+- Press \`Ctrl+Alt+N\` to create a new note
+- Press \`Ctrl+Alt+P\` to search and switch between notes
 - Notes are auto-saved — no need to save manually when switching
 - Hover over a note in the command palette to reveal the delete button
 
@@ -138,7 +139,7 @@ Paste images directly from your clipboard — they'll be stored in local browser
 
 ## Table of Contents
 
-Press \`Alt+L\` to open the outline panel on the right. It automatically extracts the heading structure from your document. Click any heading to jump to that section.
+Press \`Ctrl+L\` to open the outline panel on the right. It automatically extracts the heading structure from your document. Click any heading to jump to that section.
 
 ---
 
@@ -156,7 +157,7 @@ Access these via the command palette icons or \`>\` command mode.
 
 ## Customization
 
-Open the settings panel via the command palette (\`Alt+P\` → settings icon):
+Open the settings panel via the command palette (\`Ctrl+Alt+P\` → settings icon):
 
 - **Text font**: Choose from any system-installed font
 - **Code font**: Set a separate monospace font for code blocks
@@ -184,5 +185,5 @@ Right-click anywhere in the editor to quickly:
 
 ---
 
-Happy writing! Feel free to delete this document or keep it as a reference. Press \`Alt+T\` to create your first note.
+Happy writing! Feel free to delete this document or keep it as a reference. Press \`Ctrl+Alt+N\` to create your first note.
 `;

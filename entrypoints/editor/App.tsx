@@ -177,24 +177,39 @@ export default function App() {
     setSaveStatus('saved');
   }, []);
 
-  // Global keyboard shortcuts (Alt+key to avoid browser conflicts)
+  // Global keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!e.altKey || e.ctrlKey || e.shiftKey) return;
-
-      switch (e.key) {
-        case 't': // Alt+T: New note
-          e.preventDefault();
-          handleCreateNote();
-          break;
-        case 'p': // Alt+P: Command Palette
-          e.preventDefault();
-          setPaletteOpen((v) => !v);
-          break;
-        case 'l': // Alt+L: Toggle TOC
-          e.preventDefault();
-          setTocVisible((v) => !v);
-          break;
+      // Ctrl+Alt combinations
+      if (e.ctrlKey && e.altKey && !e.shiftKey) {
+        switch (e.key) {
+          case 'n': // Ctrl+Alt+N: New note
+            e.preventDefault();
+            handleCreateNote();
+            break;
+          case 'p': // Ctrl+Alt+P: Command Palette
+            e.preventDefault();
+            setPaletteOpen((v) => !v);
+            break;
+        }
+        return;
+      }
+      // Ctrl combinations
+      if (e.ctrlKey && !e.altKey && !e.shiftKey) {
+        switch (e.key) {
+          case 'l': // Ctrl+L: Toggle TOC
+            e.preventDefault();
+            setTocVisible((v) => !v);
+            break;
+          case 'd': // Ctrl+D: Toggle dark mode
+            e.preventDefault();
+            setSettings((prev) => {
+              const newSettings = { ...prev, darkMode: !prev.darkMode };
+              saveSettings(newSettings);
+              return newSettings;
+            });
+            break;
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);

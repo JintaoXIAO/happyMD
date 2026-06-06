@@ -7,9 +7,10 @@ interface ShortcutsPanelProps {
 
 function getShortcuts() {
   return [
-    { key: 'Alt+T', desc: t('shortcuts.newNote') },
-    { key: 'Alt+P', desc: t('shortcuts.search') },
-    { key: 'Alt+L', desc: t('shortcuts.toc') },
+    { key: 'Ctrl+Alt+N', desc: t('shortcuts.newNote') },
+    { key: 'Ctrl+Alt+P', desc: t('shortcuts.search') },
+    { key: 'Ctrl+L', desc: t('shortcuts.toc') },
+    { key: 'Ctrl+D', desc: t('shortcuts.darkMode') },
     { key: '', desc: '' },
     { key: 'Ctrl+B', desc: t('shortcuts.bold') },
     { key: 'Ctrl+I', desc: t('shortcuts.italic') },
