@@ -421,7 +421,11 @@ export default function App() {
 
       {/* Bottom status bar */}
       <div className="flex justify-between items-center px-4 py-1 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-400 shrink-0 bg-white dark:bg-[#1a1a1a] relative z-10">
-        <span>{charCount > 0 ? `${charCount} ${t('status.chars')}` : ''}</span>
+        <span>
+          {charCount > 0 ? `${charCount} ${t('status.chars')}` : ''}
+          {charCount > 0 && notes.length > 0 ? ' · ' : ''}
+          {notes.length > 0 ? `${notes.length} ${t('status.notes')}` : ''}
+        </span>
         <span className="transition-opacity duration-300">
           {statusText[saveStatus]}
         </span>

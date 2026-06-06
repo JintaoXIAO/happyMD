@@ -6,6 +6,7 @@
   "app.saveError": "✗ Save failed",
 
   "status.chars": "chars",
+  "status.notes": "notes",
 
   "note.untitled": "Untitled Note",
   "note.new": "New Note",

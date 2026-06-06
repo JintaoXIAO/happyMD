@@ -6,6 +6,7 @@
   "app.saveError": "✗ 保存失败",
 
   "status.chars": "字",
+  "status.notes": "篇笔记",
 
   "note.untitled": "无标题笔记",
   "note.new": "新建笔记",
